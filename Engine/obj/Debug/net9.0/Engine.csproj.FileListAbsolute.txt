@@ -1,0 +1,5 @@
+C:\Users\matdu\source\Personal\MiniEngine\Engine\obj\Debug\net9.0\Engine.csproj.AssemblyReference.cache
+C:\Users\matdu\source\Personal\MiniEngine\Engine\obj\Debug\net9.0\Engine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\matdu\source\Personal\MiniEngine\Engine\obj\Debug\net9.0\Engine.AssemblyInfoInputs.cache
+C:\Users\matdu\source\Personal\MiniEngine\Engine\obj\Debug\net9.0\Engine.AssemblyInfo.cs
+C:\Users\matdu\source\Personal\MiniEngine\Engine\obj\Debug\net9.0\Engine.csproj.CoreCompileInputs.cache

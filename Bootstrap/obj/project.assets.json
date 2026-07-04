@@ -267,6 +267,7 @@
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
           "Silk.NET.Input": "2.23.0",
+          "Silk.NET.Maths": "2.23.0",
           "Silk.NET.OpenGL": "2.23.0",
           "Silk.NET.Windowing": "2.23.0"
         },
@@ -283,6 +284,7 @@
         "dependencies": {
           "Engine": "1.0.0",
           "Silk.NET.Input": "2.23.0",
+          "Silk.NET.Maths": "2.23.0",
           "Silk.NET.OpenGL": "2.23.0",
           "Silk.NET.Windowing": "2.23.0"
         },

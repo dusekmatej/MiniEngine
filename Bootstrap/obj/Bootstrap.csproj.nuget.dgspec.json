@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\Bootstrap\\Bootstrap.csproj": {}
+    "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\bootstrap\\Bootstrap.csproj": {}
   },
   "projects": {
-    "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\Bootstrap\\Bootstrap.csproj": {
+    "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\bootstrap\\Bootstrap.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\Bootstrap\\Bootstrap.csproj",
+        "projectUniqueName": "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\bootstrap\\Bootstrap.csproj",
         "projectName": "Bootstrap",
-        "projectPath": "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\Bootstrap\\Bootstrap.csproj",
+        "projectPath": "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\bootstrap\\Bootstrap.csproj",
         "packagesPath": "C:\\Users\\matdu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\Bootstrap\\obj\\",
+        "outputPath": "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\bootstrap\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -130,6 +130,10 @@
               "target": "Package",
               "version": "[2.23.0, )"
             },
+            "Silk.NET.Maths": {
+              "target": "Package",
+              "version": "[2.23.0, )"
+            },
             "Silk.NET.OpenGL": {
               "target": "Package",
               "version": "[2.23.0, )"
@@ -209,6 +213,10 @@
           "targetAlias": "net9.0",
           "dependencies": {
             "Silk.NET.Input": {
+              "target": "Package",
+              "version": "[2.23.0, )"
+            },
+            "Silk.NET.Maths": {
               "target": "Package",
               "version": "[2.23.0, )"
             },

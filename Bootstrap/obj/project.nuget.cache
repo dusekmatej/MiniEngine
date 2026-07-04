@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vKn9zo/N0kY=",
+  "dgSpecHash": "JqEx8sgANL8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\Bootstrap\\Bootstrap.csproj",
+  "projectFilePath": "C:\\Users\\matdu\\source\\Personal\\MiniEngine\\bootstrap\\Bootstrap.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\matdu\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\matdu\\.nuget\\packages\\microsoft.dotnet.platformabstractions\\3.1.6\\microsoft.dotnet.platformabstractions.3.1.6.nupkg.sha512",

@@ -672,6 +672,7 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "Silk.NET.Input >= 2.23.0",
+      "Silk.NET.Maths >= 2.23.0",
       "Silk.NET.OpenGL >= 2.23.0",
       "Silk.NET.Windowing >= 2.23.0"
     ]
@@ -726,6 +727,10 @@
         "targetAlias": "net9.0",
         "dependencies": {
           "Silk.NET.Input": {
+            "target": "Package",
+            "version": "[2.23.0, )"
+          },
+          "Silk.NET.Maths": {
             "target": "Package",
             "version": "[2.23.0, )"
           },

@@ -53,6 +53,10 @@
               "target": "Package",
               "version": "[2.23.0, )"
             },
+            "Silk.NET.Maths": {
+              "target": "Package",
+              "version": "[2.23.0, )"
+            },
             "Silk.NET.OpenGL": {
               "target": "Package",
               "version": "[2.23.0, )"
@@ -132,6 +136,10 @@
           "targetAlias": "net9.0",
           "dependencies": {
             "Silk.NET.Input": {
+              "target": "Package",
+              "version": "[2.23.0, )"
+            },
+            "Silk.NET.Maths": {
               "target": "Package",
               "version": "[2.23.0, )"
             },

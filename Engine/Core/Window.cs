@@ -7,6 +7,8 @@ public class Window
 {
     private readonly IWindow _window;
 
+    public IWindow NativeWindow => _window;
+
     public event Action? Load;
     public event Action<double>? Update;
     public event Action<double>? Render;

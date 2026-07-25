@@ -3,6 +3,7 @@ namespace Database;
 public class DatabaseStorage<T>
 {
     private readonly Dictionary<string, T> _storage = new();
+    public string DatabaseName { get; private set; } = typeof(T).Name;
 
     public void Import(string key, T value)
     {
@@ -11,7 +12,7 @@ public class DatabaseStorage<T>
 
         if (value == null)
             throw new ArgumentNullException(nameof(value), "Database error: Value cannot be null.");
-
+        Console.WriteLine($"Database: Imported {typeof(T).Name} with key {key} into {DatabaseName}");
         _storage.Add(key, value);
     }
 

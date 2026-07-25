@@ -1,4 +1,5 @@
 using Silk.NET.OpenGL;
+using Engine.Graphics;
 
 namespace Engine.Core;
 
@@ -9,24 +10,9 @@ public class Engine
     private IGame _game;
     private Renderer? _renderer;
 
-    private sealed class DefaultGame : IGame
+    public Engine(IGame game)
     {
-        public void Initialize()
-        {
-        }
-
-        public void Update(float deltaTime)
-        {
-        }
-
-        public void Render()
-        {
-        }
-    }
-
-    public Engine()
-    {
-        _game = new DefaultGame();
+        _game = game;
         _game.Initialize();
         _window = new Window();
 
@@ -41,7 +27,6 @@ public class Engine
 
         _window.Update += _ =>
         {
-            Console.WriteLine($"DeltaTime: {time.DeltaTime:F10}");
             _loop.Tick();
             _game.Update(time.DeltaTime);
         };

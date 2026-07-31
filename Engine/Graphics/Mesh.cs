@@ -14,7 +14,7 @@ public class Mesh
     {
         _gl = gl;
 
-        VertexCount = vertices.Length / 2;
+        VertexCount = vertices.Length / 4;
 
         VertexArray = _gl.GenVertexArray();
         _vertexBuffer = _gl.GenBuffer();
@@ -34,17 +34,27 @@ public class Mesh
         }
 
         _gl.VertexAttribPointer(
-            0, 2, 
-            VertexAttribPointerType.Float, 
-            false, 
-            2 * sizeof(float), 
+            0, 2,
+            VertexAttribPointerType.Float,
+            false,
+            4 * sizeof(float),
             (void*)0);
 
-            _gl.EnableVertexAttribArray(0);
-            
-            _gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
-            _gl.BindVertexArray(0);
+        _gl.EnableVertexAttribArray(0);
+
+        _gl.VertexAttribPointer(
+            1, 2,
+            VertexAttribPointerType.Float,
+            false,
+            4 * sizeof(float),
+            (void*)(2 * sizeof(float)));
+
+        _gl.EnableVertexAttribArray(1);
+
+        _gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+        _gl.BindVertexArray(0);
     }
+
 
     public void Bind()
     {

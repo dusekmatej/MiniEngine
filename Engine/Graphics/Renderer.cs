@@ -1,6 +1,7 @@
 using Shader =  Engine.Graphics.Shader;
 using Silk.NET.OpenGL;
 using System.Numerics;
+using Engine.Core;
 
 namespace Engine.Graphics;
 
@@ -10,7 +11,10 @@ public class Renderer
     private const string VertexShaderSource = @"
     #version 330 core
 
-    layout (location = 0) in vec2 aPosition;
+    layout(location = 0) in vec2 aPosition;
+    layout(location = 1) in vec2 aTexCoord;
+
+    out vec2 TexCoord;
 
     uniform mat4 uModel;
 
@@ -18,7 +22,9 @@ public class Renderer
     {
         gl_Position =
             uModel *
-            vec4(aPosition,0.0,1.0);
+            vec4(aPosition,0,1);
+
+        TexCoord = aTexCoord;
     }
     ";
 
@@ -27,10 +33,14 @@ public class Renderer
 
     out vec4 FragColor;
 
+    in vec2 TexCoord;
+
+    uniform sampler2D uTexture;
+
     void main()
     {
         FragColor =
-            vec4(1.0,0.0,0.0,1.0);
+            texture(uTexture, TexCoord);
     }
     ";
     #endregion
@@ -52,11 +62,11 @@ public class Renderer
     {
         float[] vertices =
         {
-            // x, y
-            0f, 0f,
-            1f, 0f,
-            1f, 1f,
-            0f, 1f
+            // x, y, u, v
+            0f, 0f, 0f, 0f,
+            1f, 0f, 1f, 0f,
+            1f, 1f, 1f, 1f,
+            0f, 1f, 0f, 1f
         };
 
         _quad = new Mesh(_gl, vertices);
@@ -74,7 +84,12 @@ public class Renderer
         _gl.Clear((uint)ClearBufferMask.ColorBufferBit);
     }
 
-    public unsafe void DrawRectangle(float x, float y, float width, float height)
+    public Texture CreateTexture(ImageData image)
+    {
+        return new Texture(_gl, image);
+    }
+
+    public unsafe void DrawTexture(Texture texture, float x, float y, float width, float height)
     {
         _shader.Use();
 
@@ -86,6 +101,7 @@ public class Renderer
 
         _gl.UniformMatrix4(modelLoc, 1, false, (float*)&model);
 
+        texture.Bind();
         _quad.Bind();
         _gl.DrawArrays(PrimitiveType.TriangleFan, 0, 4);
     }

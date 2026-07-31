@@ -13,7 +13,6 @@ public class Engine
     public Engine(IGame game)
     {
         _game = game;
-        _game.Initialize();
         _window = new Window();
 
         var time = new Time();
@@ -23,6 +22,7 @@ public class Engine
         {
             var gl = GL.GetApi(_window.NativeWindow);
             _renderer = new Renderer(gl);
+            _game.Initialize(_renderer);
         };
 
         _window.Update += _ =>
@@ -35,13 +35,13 @@ public class Engine
         {
             _renderer?.Clear();
 
-            if (_renderer is not null)
-            {
-                foreach (var tile in _loop.TilesToDraw)
-                {
-                    _renderer.DrawRectangle(tile.X, tile.Y, tile.Width, tile.Height);
-                }
-            }
+            // if (_renderer is not null)
+            // {
+            //     foreach (var tile in _loop.TilesToDraw)
+            //     {
+            //         _renderer.DrawTexture(tile.X, tile.Y, tile.Width, tile.Height);
+            //     }
+            // }
 
             _game.Render();
         };

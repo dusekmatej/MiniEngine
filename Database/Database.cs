@@ -1,4 +1,4 @@
-namespace Database;
+namespace MiniEngine.Database;
 
 public static class Database
 {

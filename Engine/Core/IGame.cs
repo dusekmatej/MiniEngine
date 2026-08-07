@@ -1,6 +1,6 @@
-using Engine.Graphics;
+using MiniEngine.Engine.Graphics;
 
-namespace Engine.Core;
+namespace MiniEngine.Engine.Core;
 
 public interface IGame
 {

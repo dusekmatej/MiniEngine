@@ -1,4 +1,4 @@
-namespace Engine.Core;
+namespace MiniEngine.Engine.Core;
 
 public class Time
 {

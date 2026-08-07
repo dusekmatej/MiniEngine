@@ -1,7 +1,7 @@
-using Engine.Core;
+using MiniEngine.Engine.Core;
 using StbImageSharp;
 
-namespace AssetPipeline;
+namespace MiniEngine.AssetPipeline;
 
 public static class ImageLoader
 {

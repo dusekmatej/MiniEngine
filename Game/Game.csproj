@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -7,15 +6,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Silk.NET.Input" Version="2.23.0" />
-      <PackageReference Include="Silk.NET.Maths" Version="2.23.0" />
-      <PackageReference Include="Silk.NET.OpenGL" Version="2.23.0" />
-      <PackageReference Include="Silk.NET.Windowing" Version="2.23.0" />
+      <PackageReference Include="Silk.NET.Input"/>
+      <PackageReference Include="Silk.NET.Maths"/>
+      <PackageReference Include="Silk.NET.OpenGL"/>
+      <PackageReference Include="Silk.NET.Windowing"/>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Engine\Engine.csproj" />
       <ProjectReference Include="..\Database\Database.csproj" />
     </ItemGroup>
-
 </Project>

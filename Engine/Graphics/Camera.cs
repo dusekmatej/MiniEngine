@@ -1,5 +1,7 @@
 using Silk.NET.Maths;
 
+namespace MiniEngine.Engine.Graphics;
+
 public class Camera
 {
     public Vector2D<float> Position { get; set; }

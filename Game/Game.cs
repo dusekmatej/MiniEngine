@@ -1,8 +1,8 @@
-using Database.Import;
-using Engine.Graphics;
-using Engine.Core;
+using MiniEngine.Database.Import;
+using MiniEngine.Engine.Graphics;
+using MiniEngine.Engine.Core;
 
-namespace Game;
+namespace MiniEngine.Game;
 
 public class Game : IGame
 {
@@ -17,7 +17,7 @@ public class Game : IGame
 
         TerrainImport.PopulateDatabase();
 
-        var tile = global::Database.Database.Get<ImageData>("tile_000");
+        var tile = global::MiniEngine.Database.Database.Get<ImageData>("tile_000");
 
         if (tile != null)
         {

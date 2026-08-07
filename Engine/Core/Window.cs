@@ -1,7 +1,7 @@
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
 
-namespace Engine.Core;
+namespace MiniEngine.Engine.Core;
 
 public class Window
 {
@@ -46,7 +46,5 @@ public class Window
         => _window.Run();
 
     public void Close()
-    {
-        _window.Close();
-    }
+        => _window.Close();
 }

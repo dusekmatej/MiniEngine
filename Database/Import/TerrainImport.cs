@@ -1,8 +1,8 @@
-using Engine.Core;
-using AssetPipeline;
+using MiniEngine.Engine.Core;
+using MiniEngine.AssetPipeline;
 using System.Linq;
 
-namespace Database.Import;
+namespace MiniEngine.Database.Import;
 
 public static class TerrainImport
 {

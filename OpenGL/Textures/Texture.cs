@@ -1,13 +1,13 @@
 using MiniEngine.Core;
 using Silk.NET.OpenGL;
 
-namespace MiniEngine.Graphics;
+namespace MiniEngine.OpenGL.Textures;
 
 public class Texture
 {
     private readonly GL _gl;
 
-    public uint Id { get; }
+    public uint Handle { get; }
 
     public int Width { get; }
     public int Height { get; }
@@ -19,7 +19,7 @@ public class Texture
         Width = img.Width;
         Height = img.Height;
 
-        Id = _gl.GenTexture();
+        Handle = _gl.GenTexture();
 
         Bind();
 
@@ -58,7 +58,7 @@ public class Texture
 
     public void Bind()
     {
-        _gl.BindTexture(TextureTarget.Texture2D, Id);
+        _gl.BindTexture(TextureTarget.Texture2D, Handle);
     }
 
 }

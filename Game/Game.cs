@@ -6,12 +6,12 @@ namespace MiniEngine.Game;
 
 public class Game : IGame
 {
-    private Texture? _tileTexture;
-    private Renderer? _renderer;
+    private BackendTextureHandle? _tileTexture;
+    private IGraphicsBackend? _graphics;
 
-    public void Initialize(Renderer renderer)
+    public void Initialize(IGraphicsBackend graphics)
     {
-        _renderer = renderer;
+        _graphics = graphics;
 
         Console.WriteLine("Game: Initializing game...");
 
@@ -25,7 +25,7 @@ public class Game : IGame
                 $"Game: Successfully retrieved image 'tile_000' from the database. " +
                 $"Dimensions: {tile.Width}x{tile.Height}");
 
-            _tileTexture = _renderer.CreateTexture(tile);
+            _tileTexture = _graphics.CreateTexture(tile);
         }
         else
         {
@@ -41,11 +41,11 @@ public class Game : IGame
 
     public void Render()
     {
-        if (_tileTexture == null)
+        if (_tileTexture is null || _graphics is null)
             return;
 
-        _renderer.DrawTexture(
-            _tileTexture,
+        _graphics.DrawTexture(
+            _tileTexture.Value,
             0f,
             0f,
             1f,

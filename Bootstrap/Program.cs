@@ -1,6 +1,10 @@
 ﻿using MiniEngine.Core;
 using MiniEngine.Game;
+using MiniEngine.OpenGL.Core;
 
-Engine engine = new Engine(new Game());
+var game = new Game();
+var graphicsFactory = new BackendFactory();
+
+var engine = new Engine(game, graphicsFactory);
 
 engine.Run();

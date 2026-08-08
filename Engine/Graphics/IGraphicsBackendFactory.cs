@@ -1,4 +1,4 @@
-namespace MiniEngine.Rendering;
+namespace MiniEngine.Graphics;
 
 public interface IGraphicsBackendFactory
 {

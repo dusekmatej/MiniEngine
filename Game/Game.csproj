@@ -15,5 +15,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Engine\Engine.csproj" />
       <ProjectReference Include="..\Database\Database.csproj" />
+      <ProjectReference Include="..\OpenGL\OpenGL.csproj" />
     </ItemGroup>
 </Project>

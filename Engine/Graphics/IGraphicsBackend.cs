@@ -1,6 +1,6 @@
 using MiniEngine.Core;
 
-namespace MiniEngine.Rendering;
+namespace MiniEngine.Graphics;
 
 public interface IGraphicsBackend
 {

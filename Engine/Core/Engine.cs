@@ -9,16 +9,18 @@ public class Engine
     private Window _window; // Don't mistake the IWindow with Window class
     private GameLoop _loop;
     private IGame _game;
-    private Renderer? _renderer;
+    private IGraphicsBackendFactory _graphicsFactory;
+    private IGraphicsBackend _graphics;
 
     // TESTING FIELD FOR SYSTEMS
     private readonly List<SystemInfo> _systems; 
 
-    public Engine(IGame game)
+    public Engine(IGame game, IGraphicsBackendFactory graphicsFactory)
     {
         _game = game;
-        _window = new Window();
+        _graphicsFactory = graphicsFactory;
 
+        _window = new Window();
         _systems = SystemDiscovery.Discover();
 
         var time = new Time();
@@ -26,9 +28,13 @@ public class Engine
 
         _window.Load += () =>
         {
-            var gl = GL.GetApi(_window.NativeWindow);
-            _renderer = new Renderer(gl);
-            _game.Initialize(_renderer);
+            var glContext = _window.NativeWindow.GLContext 
+                ?? throw new InvalidOperationException("GLContext is null."); 
+
+            var context = new GraphicsContext(name => glContext.GetProcAddress(name));
+
+            _graphics = _graphicsFactory.Create(context);
+            _game.Initialize(_graphics);
         };
 
         _window.Update += _ =>
@@ -48,7 +54,7 @@ public class Engine
 
         _window.Render += _ =>
         {
-            _renderer?.Clear();
+            _graphics.Clear();
 
             // if (_renderer is not null)
             // {

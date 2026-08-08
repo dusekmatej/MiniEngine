@@ -4,7 +4,7 @@ namespace MiniEngine.Core;
 
 public interface IGame
 {
-    public void Initialize(Renderer renderer);
+    public void Initialize(IGraphicsBackend graphics);
     public void Update(float deltaTime);
     public void Render();
 }

@@ -1,5 +1,6 @@
 using Silk.NET.OpenGL;
 using MiniEngine.Graphics;
+using MiniEngine.Systems.Core;
 
 namespace MiniEngine.Core;
 
@@ -10,10 +11,15 @@ public class Engine
     private IGame _game;
     private Renderer? _renderer;
 
+    // TESTING FIELD FOR SYSTEMS
+    private readonly List<SystemInfo> _systems; 
+
     public Engine(IGame game)
     {
         _game = game;
         _window = new Window();
+
+        _systems = SystemDiscovery.Discover();
 
         var time = new Time();
         _loop = new GameLoop(time);
@@ -28,6 +34,15 @@ public class Engine
         _window.Update += _ =>
         {
             _loop.Tick();
+
+            var x = new SystemContext(time.DeltaTime);
+
+            foreach (var systemInfo in _systems)
+            {
+                if (systemInfo.System is IUpdateSystem system)
+                    system.Update(x);
+            }
+
             _game.Update(time.DeltaTime);
         };
 

@@ -1,7 +1,7 @@
 using Silk.NET.OpenGL;
-using MiniEngine.Engine.Graphics;
+using MiniEngine.Graphics;
 
-namespace MiniEngine.Engine.Core;
+namespace MiniEngine.Core;
 
 public class Engine
 {

@@ -1,3 +1,6 @@
-﻿MiniEngine.Engine.Core.Engine engine = new MiniEngine.Engine.Core.Engine(new MiniEngine.Game.Game());
+﻿using MiniEngine.Core;
+using MiniEngine.Game;
+
+Engine engine = new Engine(new Game());
 
 engine.Run();

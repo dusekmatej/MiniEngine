@@ -1,6 +1,6 @@
 using Silk.NET.Maths;
 
-namespace MiniEngine.Engine.Graphics;
+namespace MiniEngine.Graphics;
 
 public class Camera
 {

@@ -1,7 +1,7 @@
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
 
-namespace MiniEngine.Engine.Core;
+namespace MiniEngine.Core;
 
 public class Window
 {

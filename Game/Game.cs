@@ -1,6 +1,6 @@
 using MiniEngine.Database.Import;
-using MiniEngine.Engine.Graphics;
-using MiniEngine.Engine.Core;
+using MiniEngine.Graphics;
+using MiniEngine.Core;
 
 namespace MiniEngine.Game;
 

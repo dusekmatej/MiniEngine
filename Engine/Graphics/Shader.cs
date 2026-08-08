@@ -1,6 +1,6 @@
 using Silk.NET.OpenGL;
 
-namespace MiniEngine.Engine.Graphics;
+namespace MiniEngine.Graphics;
 
 public class Shader
 {

@@ -1,4 +1,4 @@
-using MiniEngine.Engine.Core;
+using MiniEngine.Core;
 using StbImageSharp;
 
 namespace MiniEngine.AssetPipeline;

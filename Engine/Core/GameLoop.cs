@@ -1,7 +1,7 @@
 using Silk.NET.Maths;
-using MiniEngine.Engine.Graphics;
+using MiniEngine.Graphics;
 
-namespace MiniEngine.Engine.Core;
+namespace MiniEngine.Core;
 
 public class GameLoop
 {

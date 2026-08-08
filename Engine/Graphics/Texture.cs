@@ -1,7 +1,7 @@
-using MiniEngine.Engine.Core;
+using MiniEngine.Core;
 using Silk.NET.OpenGL;
 
-namespace MiniEngine.Engine.Graphics;
+namespace MiniEngine.Graphics;
 
 public class Texture
 {

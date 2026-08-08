@@ -1,9 +1,9 @@
-using Shader =  MiniEngine.Engine.Graphics.Shader;
+using Shader =  MiniEngine.Graphics.Shader;
 using Silk.NET.OpenGL;
 using System.Numerics;
-using MiniEngine.Engine.Core;
+using MiniEngine.Core;
 
-namespace MiniEngine.Engine.Graphics;
+namespace MiniEngine.Graphics;
 
 public class Renderer
 {

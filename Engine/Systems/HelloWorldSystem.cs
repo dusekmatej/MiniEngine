@@ -8,6 +8,5 @@ public class HelloWorldSystem : IUpdateSystem
 {
     public void Update(SystemContext x)
     {
-        Console.WriteLine("Hello, world!");
     }
 }

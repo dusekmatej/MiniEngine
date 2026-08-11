@@ -69,13 +69,16 @@ public class Renderer : IGraphicsBackend
 
     private unsafe void CreateResources()
     {
+        _gl.Enable(EnableCap.Blend);
+        _gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
         float[] vertices =
         {
             // x, y, u, v
-            0f, 0f, 0f, 0f,
-            1f, 0f, 1f, 0f,
-            1f, 1f, 1f, 1f,
-            0f, 1f, 0f, 1f
+            0f, 0f, 0f, 1f,
+            1f, 0f, 1f, 1f,
+            1f, 1f, 1f, 0f,
+            0f, 1f, 0f, 0f
         };
 
         _quad = new Mesh(_gl, vertices);

@@ -11,6 +11,7 @@ public class Engine
     private IGame _game;
     private IGraphicsBackendFactory _graphicsFactory;
     private IGraphicsBackend _graphics;
+    private TextureManager? _textureManager;
 
     // TESTING FIELD FOR SYSTEMS
     private readonly List<SystemInfo> _systems; 
@@ -34,7 +35,8 @@ public class Engine
             var context = new GraphicsContext(name => glContext.GetProcAddress(name));
 
             _graphics = _graphicsFactory.Create(context);
-            _game.Initialize(_graphics);
+            _textureManager = new TextureManager(_graphics);
+            _game.Initialize(_graphics, _textureManager);
         };
 
         _window.Update += _ =>

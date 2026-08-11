@@ -3,13 +3,16 @@ internal sealed class ComponentStore<T> : IComponentStore
 {
     private int[] _sparse = [];
     private int[] _denseEntities = [];
-    public T[] _denseComponents = [];
+    private T[] _denseComponents = [];
 
     private int _count;
     public int Count => _count;
 
     public void Add(int entityIndex, T component)
     {
+        if (Has(entityIndex))
+    throw new InvalidOperationException("Entity already has this component.");
+
         if (entityIndex >= _sparse.Length)
             resize(entityIndex);
 
@@ -48,7 +51,7 @@ internal sealed class ComponentStore<T> : IComponentStore
     }
 
     public bool Remove(int entityIndex)
-{
+    {
     if (!Has(entityIndex))
         return false;
 
@@ -69,4 +72,14 @@ internal sealed class ComponentStore<T> : IComponentStore
 
     return true;
 }
+public bool TryGet(int entityIndex, out T component)
+{
+    if (Has(entityIndex))
+    {
+        component = component = Get(entityIndex);
+        return true;
+    }
+
+    component = default;
+    return false;
 }

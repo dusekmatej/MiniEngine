@@ -1,14 +1,30 @@
 # MiniEngine
-- This is my current side project for fun in 2026
 
-# Introduction 
-I always wanted to get into Game-Dev 
-at least for fun but I figured out that 
-it is way more fun to attempt making GameEngine.
+MiniEngine is a lightweight game engine written in C#.
 
-## My plan with this
-I would like to make this project open-source, but before
-that I need to develop this into a stable working
-version, with clean code. But if you stumble
-upon this and you would want to join, then contact
-me, you can find contact info on my profile. 
+The project started as a way to learn more about lower-level game development instead of relying on an existing engine. The main focus is understanding and implementing the systems that normally work behind the scenes in a game engine.
+
+Current areas of development include:
+
+* Entity-Component-System architecture
+* Automatic system discovery
+* Rendering abstraction
+* Asset management
+* Scene and entity management
+* Isometric rendering
+
+The goal is to keep the engine lightweight, understandable and separated into clean reusable parts.
+
+## Documentation
+
+Start here:
+
+### [Architecture Overview](./docs/Overview.md)
+
+The overview contains the main parts of MiniEngine and links to documentation for individual engine features.
+
+## Project Status
+
+MiniEngine is currently in active development and its architecture is still evolving.
+
+The project may become open source once the engine reaches a more stable state. Contributions and ideas are still welcome in the meantime.

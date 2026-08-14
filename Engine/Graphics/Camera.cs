@@ -1,28 +1,27 @@
+using System.Numerics;
 using Silk.NET.Maths;
 
 namespace MiniEngine.Graphics;
 
 public class Camera
 {
-    public Vector2D<float> Position { get; set; }
-    public float Zoom { get; set; }
+    private float _zoom = 1f;
+    public Vector3 Position { get; set; }
 
-    public Camera(Vector2D<float> position)
+    public float Zoom
     {
-        Position = position; 
+        get => _zoom;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(value), "Zoom must be greater than zero.");
+
+            _zoom = value;
+        }
     }
 
-    public Vector2D<float> CalculateScreenPosition(Vector3D<float> worldPosition)
+    public Camera(Vector3 position)
     {
-        var screenX = (worldPosition.X - worldPosition.Y) * 32f;
-        var screenY = (worldPosition.X + worldPosition.Y) * 16f - worldPosition.Z * 32f;
-
-        screenX -= Position.X;
-        screenY -= Position.Y;
-
-        screenX *= Zoom;
-        screenY *= Zoom;
-
-        return new Vector2D<float>(screenX, screenY);
+        Position = position;
     }
 }

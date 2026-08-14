@@ -1,20 +1,31 @@
+using System.Numerics;
 using MiniEngine.Database.Import;
-using MiniEngine.Graphics;
 using MiniEngine.Graphics.Presets;
+using MiniEngine.Graphics;
 using MiniEngine.Core;
 
 namespace MiniEngine.Game;
 
 public class Game : IGame
 {
+    private static readonly Vector2 TerrainScreenOrigin = new Vector2(-0.15f, 0.35f);
     private TextureAssetHandle? _tileTexture;
 
     private TextureManager? _textureManager;
     private IGraphicsBackend? _graphics;
 
     private IsometricPreset _preset = IsometricPreset.Default;
-
+    private IsometricProjection _projection;
+    private Camera _camera;
+    private List<TerrainRenderItem> _terrainRenderBuffer = new(256);
     private TileMap? _map;
+
+    public Game()
+    {
+        _preset = IsometricPreset.Default;
+        _projection = new IsometricProjection(_preset);
+        _camera = new Camera(Vector3.Zero);
+    }
 
     public void Initialize(IGraphicsBackend graphics, TextureManager textureManager)
     {
@@ -36,19 +47,7 @@ public class Game : IGame
 
         _tileTexture = _textureManager.Load("tile_000", tile);
 
-        _map = new TileMap(9, 9);
-
-        for (int y = 0; y < _map.Height; y++)
-        {
-            for (int x = 0; x < _map.Width; x++)
-            {
-                _map[x, y] = 0;
-            }
-        }
-
-        Console.WriteLine(
-            $"Game: Successfully retrieved image 'tile_000' from the database. " +
-            $"Dimensions: {tile.Width}x{tile.Height}");
+        CreateTempTerrainmap();
     }
 
     public void Update(float deltaTime)
@@ -57,8 +56,9 @@ public class Game : IGame
 
     public void Render()
     {
-        if (_tileTexture is null || _textureManager is null || _graphics is null)
-            return;
+        RenderTerrain();
+
+
 
         var backendTexture = 
             _textureManager.GetBackendHandle(_tileTexture.Value);
@@ -97,5 +97,72 @@ public class Game : IGame
             }
         }
 
+    }
+
+    private void RenderTerrain()
+    {
+        if (_map is null || _tileTexture is null || 
+            _textureManager is null || _graphics is null)
+            return;
+
+        BackendTextureHandle backendTexture = _textureManager.GetBackendHandle(_tileTexture.Value);
+
+
+    }
+
+    private void CollectTerrainTiles(TileMap map)
+    {
+        _terrainRenderBuffer.Clear();
+
+        for (int y = 0; y < map.Height; y++)
+        {
+            for (int x = 0; x < map.Width; x++)
+            {
+                int tileId = map[x, y];
+
+                if (tileId != 0)
+                    continue;
+
+                var worldPosition =
+                    new Vector3(x, y, 0);
+
+                Vector2 screenPosition =
+                    _projection.WorldToScreen(
+                        worldPosition,
+                        _camera,
+                        TerrainScreenOrigin);
+
+                var renderItem = new TerrainRenderItem(
+                    TileId: tileId,
+                    WorldX: x,
+                    WorldY: y,
+                    WorldZ: 0,
+                    ScreenPosition: screenPosition);
+
+                _terrainRenderBuffer.Add(renderItem);
+            }
+        }
+    }
+
+    private void SortTerrainTiles()
+    {
+        _terrainRenderBuffer.Sort()
+    }
+
+    private void DrawTerrainTiles()
+    {
+        throw new NotImplementedException();    
+    }
+
+
+    private readonly struct TerrainRenderItem(
+        int TileId,
+        int WorldX,
+        int WorldY,
+        int WorldZ,
+        Vector2 ScreenPosition
+    )
+    {
+        public int Depth => WorldX + WorldY;
     }
 }

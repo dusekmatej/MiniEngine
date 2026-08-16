@@ -8,6 +8,7 @@ namespace MiniEngine.Game;
 
 public class Game : IGame
 {
+    private const int GridSize = 9;
     private static readonly Vector2 TerrainScreenOrigin = new Vector2(-0.15f, 0.35f);
     private TextureAssetHandle? _tileTexture;
 
@@ -17,8 +18,7 @@ public class Game : IGame
     private IsometricPreset _preset = IsometricPreset.Default;
     private IsometricProjection _projection;
     private Camera _camera;
-    private List<TerrainRenderItem> _terrainRenderBuffer = new(256);
-    private TileMap? _map;
+    private TileMap _map = new TileMap(GridSize, GridSize);
 
     public Game()
     {
@@ -46,8 +46,6 @@ public class Game : IGame
         }
 
         _tileTexture = _textureManager.Load("tile_000", tile);
-
-        CreateTempTerrainmap();
     }
 
     public void Update(float deltaTime)
@@ -56,22 +54,18 @@ public class Game : IGame
 
     public void Render()
     {
-        RenderTerrain();
+        if (_textureManager is null || _graphics is null || _tileTexture is null)
+            return;
 
+        var backendTexture = _textureManager.GetBackendHandle(_tileTexture.Value);
 
-
-        var backendTexture = 
-            _textureManager.GetBackendHandle(_tileTexture.Value);
-
-        const int gridSize = 9;
-        
         const float originX = -0.15f;
         const float originY = 0.35f;
 
-        for (int depth = 0; depth <= (gridSize - 1) * 2; depth++)
+        for (int depth = 0; depth <= (GridSize - 1) * 2; depth++)
         {
-            int minimumX = Math.Max(0, depth - (gridSize - 1));
-            int maximumX = Math.Min(gridSize - 1, depth);
+            int minimumX = Math.Max(0, depth - (GridSize - 1));
+            int maximumX = Math.Min(GridSize - 1, depth);
 
             for (int gridX = minimumX; gridX <= maximumX; gridX++)
             {
@@ -99,70 +93,4 @@ public class Game : IGame
 
     }
 
-    private void RenderTerrain()
-    {
-        if (_map is null || _tileTexture is null || 
-            _textureManager is null || _graphics is null)
-            return;
-
-        BackendTextureHandle backendTexture = _textureManager.GetBackendHandle(_tileTexture.Value);
-
-
-    }
-
-    private void CollectTerrainTiles(TileMap map)
-    {
-        _terrainRenderBuffer.Clear();
-
-        for (int y = 0; y < map.Height; y++)
-        {
-            for (int x = 0; x < map.Width; x++)
-            {
-                int tileId = map[x, y];
-
-                if (tileId != 0)
-                    continue;
-
-                var worldPosition =
-                    new Vector3(x, y, 0);
-
-                Vector2 screenPosition =
-                    _projection.WorldToScreen(
-                        worldPosition,
-                        _camera,
-                        TerrainScreenOrigin);
-
-                var renderItem = new TerrainRenderItem(
-                    TileId: tileId,
-                    WorldX: x,
-                    WorldY: y,
-                    WorldZ: 0,
-                    ScreenPosition: screenPosition);
-
-                _terrainRenderBuffer.Add(renderItem);
-            }
-        }
-    }
-
-    private void SortTerrainTiles()
-    {
-        _terrainRenderBuffer.Sort()
-    }
-
-    private void DrawTerrainTiles()
-    {
-        throw new NotImplementedException();    
-    }
-
-
-    private readonly struct TerrainRenderItem(
-        int TileId,
-        int WorldX,
-        int WorldY,
-        int WorldZ,
-        Vector2 ScreenPosition
-    )
-    {
-        public int Depth => WorldX + WorldY;
-    }
 }

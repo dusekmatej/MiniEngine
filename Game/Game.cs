@@ -1,4 +1,5 @@
 using System.Numerics;
+using MiniEngine.Environment;
 using MiniEngine.Database.Import;
 using MiniEngine.Graphics.Presets;
 using MiniEngine.Graphics;
@@ -25,7 +26,7 @@ public class Game : IGame
         _preset = IsometricPreset.Default;
         _projection = new IsometricProjection(_preset);
         _camera = new Camera(Vector3.Zero);
-    }
+      }
 
     public void Initialize(IGraphicsBackend graphics, TextureManager textureManager)
     {
@@ -46,6 +47,9 @@ public class Game : IGame
         }
 
         _tileTexture = _textureManager.Load("tile_000", tile);
+
+        // Tests
+        TileDefinitionsTest();
     }
 
     public void Update(float deltaTime)
@@ -53,6 +57,11 @@ public class Game : IGame
     }
 
     public void Render()
+    {
+        DrawPlatform();
+    }
+
+    private void DrawPlatform()
     {
         if (_textureManager is null || _graphics is null || _tileTexture is null)
             return;
@@ -90,7 +99,24 @@ public class Game : IGame
                     );
             }
         }
+    }
 
+    private void TileDefinitionsTest()
+    {
+        var tileDef = new TileDefinitionRegistry();
+
+        var grassId = tileDef.Register(new TileDefinition("Grass"));
+        var dirtId = tileDef.Register(new TileDefinition("Dirt"));
+
+        var grassTile = new Tile(grassId);
+        var dirtTile = new Tile(dirtId, 2);
+        
+        Console.WriteLine("-----------------------------------------------");
+        Console.WriteLine($"Grass ID: {grassTile.DefinitionId.Value}, key: {tileDef.Get(grassTile.DefinitionId)?.Key}");
+        Console.WriteLine($"Dirt ID: {dirtTile.DefinitionId.Value}, key: {tileDef.Get(dirtTile.DefinitionId)?.Key}, variation: {dirtTile.Variation}");
+        Console.WriteLine($"Grass valid: {grassTile.DefinitionId.IsValid}");
+        Console.WriteLine($"Dirt valid: {dirtTile.DefinitionId.IsValid}");
+        Console.WriteLine("-----------------------------------------------");
     }
 
 }

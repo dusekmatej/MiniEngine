@@ -1,4 +1,4 @@
-﻿using MiniEngine.Core;
+﻿using MiniEngine;
 using MiniEngine.OpenGL.Core;
 using System.Reflection;
 

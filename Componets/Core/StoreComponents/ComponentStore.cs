@@ -83,3 +83,4 @@ public bool TryGet(int entityIndex, out T component)
     component = default;
     return false;
 }
+}

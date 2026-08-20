@@ -1,3 +1,7 @@
+using MiniEngine.Engine.Components.Core;
+
+namespace MiniEngine.Components.Core.StoreComponents;
+
 internal sealed class ComponentStore<T> : IComponentStore
     where T : struct, IComponent
 {
@@ -14,7 +18,7 @@ internal sealed class ComponentStore<T> : IComponentStore
     throw new InvalidOperationException("Entity already has this component.");
 
         if (entityIndex >= _sparse.Length)
-            resize(entityIndex);
+            Array.Resize(ref _sparse, Math.Max(4, entityIndex + 1));
 
         if (_denseEntities.Length <= _count)
             Array.Resize(ref _denseEntities, Math.Max(4, _denseComponents.Length * 2));

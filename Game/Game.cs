@@ -89,14 +89,23 @@ public class Game : IGame
                     originX + (gridX - gridY) * _preset.FootprintWidth / 2f;
                 float screenY = 
                     originY - (gridX + gridY) * _preset.FootprintHeight / 2f;
-                
-                _graphics.DrawTexture(
+
+                var drawCommand = new TextureDrawCommand(
                     backendTexture, 
                     screenX, 
                     screenY, 
                     _preset.SpriteWidth, 
                     _preset.SpriteHeight
-                    );
+                );
+                
+                _graphics.DrawTexture(drawCommand);
+                _graphics.DrawRectangle(new RectangleDrawCommand(
+                    screenX, 
+                    screenY, 
+                    _preset.SpriteWidth, 
+                    _preset.SpriteHeight, 
+                    EngineColor.Yellow
+                ));
             }
         }
     }

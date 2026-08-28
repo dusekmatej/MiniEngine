@@ -2,12 +2,12 @@ using Silk.NET.OpenGL;
 using System.Numerics;
 
 using MiniEngine.Core;
+
 using MiniEngine.Graphics;
 
 using Shader = MiniEngine.OpenGL.Shaders.Shader;
 using Texture = MiniEngine.OpenGL.Textures.Texture;
 using Mesh = MiniEngine.OpenGL.Meshes.Mesh;
-using System.Reflection.Metadata;
 
 
 namespace MiniEngine.OpenGL.Core;
@@ -35,8 +35,7 @@ public class Renderer : IGraphicsBackend
         TexCoord = aTexCoord;
     }
     ";
-
-    private const string FragmentShaderSource = @"
+    private const string TextureFragmentShaderSource = @"
     #version 330 core
 
     out vec4 FragColor;
@@ -51,11 +50,24 @@ public class Renderer : IGraphicsBackend
             texture(uTexture, TexCoord);
     }
     ";
+    private const string ColorFragmentShaderSource = @"
+    #version 330 core
+    
+    out vec4 FragColor;
+    
+    uniform vec4 uColor;
+    
+    void main()
+    {
+        FragColor = uColor;
+    }
+    ";
     #endregion
 
     private readonly GL _gl;
     private Mesh _quad;
-    private Shader _shader;
+    private Shader _textureShader;
+    private Shader _colorShader;
 
     private readonly Dictionary<int, Texture> _textures = new();
     private int _nextTextureHandle = 1;
@@ -83,11 +95,8 @@ public class Renderer : IGraphicsBackend
 
         _quad = new Mesh(_gl, vertices);
 
-        _shader = new Shader(
-            _gl,
-            VertexShaderSource,
-            FragmentShaderSource
-        );
+        _textureShader = new Shader(_gl, VertexShaderSource, TextureFragmentShaderSource);
+        _colorShader = new Shader(_gl, VertexShaderSource, ColorFragmentShaderSource);
     }
 
     public void Clear()
@@ -107,22 +116,41 @@ public class Renderer : IGraphicsBackend
         return handle;
     }
 
-    public unsafe void DrawTexture(BackendTextureHandle handle, float x, float y, float width, float height)
+    public unsafe void DrawTexture(TextureDrawCommand command)
     {
-        if (!_textures.TryGetValue(handle.Value, out var texture))
-            throw new InvalidOperationException($"Texture handle {handle.Value} does not exist.");
+        if (!_textures.TryGetValue(command.Texture.Value, out var texture))
+            throw new InvalidOperationException($"Texture handle {command.Texture.Value} does not exist.");
 
-        _shader.Use();
+        _textureShader.Use();
 
         Matrix4x4 model =
-            Matrix4x4.CreateScale(width, height, 1f) *
-            Matrix4x4.CreateTranslation(x, y, 0f);
+            Matrix4x4.CreateScale(command.Width, command.Height, 1f) *
+            Matrix4x4.CreateTranslation(command.X, command.Y, 0f);
 
-        int modelLoc = _shader.GetUniformLocation("uModel");
+        int modelLoc = _textureShader.GetUniformLocation("uModel");
 
         _gl.UniformMatrix4(modelLoc, 1, false, (float*)&model);
 
         texture.Bind();
+        _quad.Bind();
+        _gl.DrawArrays(PrimitiveType.TriangleFan, 0, 4);
+    }
+
+    public unsafe void DrawRectangle(RectangleDrawCommand command)
+    {
+        _colorShader.Use();
+
+        Matrix4x4 model = Matrix4x4.CreateScale(command.Width, command.Height, 1f) *
+            Matrix4x4.CreateTranslation(command.X, command.Y, 0f);
+
+        int modelLoc = _colorShader.GetUniformLocation("uModel");
+
+        _gl.UniformMatrix4(modelLoc, 1, false, (float*)&model);
+
+        int colorLoc = _colorShader.GetUniformLocation("uColor");
+
+        _gl.Uniform4(colorLoc, command.Color.R, command.Color.G, command.Color.B, command.Color.A);
+
         _quad.Bind();
         _gl.DrawArrays(PrimitiveType.TriangleFan, 0, 4);
     }

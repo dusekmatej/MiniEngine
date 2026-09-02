@@ -1,7 +1,7 @@
 using System.Numerics;
-using MiniEngine.Engine.Components.Core;
+using MiniEngine.Components.Core;
 
-namespace MiniEngine.Engine.Components;
+namespace MiniEngine.Components;
 
 public struct TintComponent : IComponent
 {

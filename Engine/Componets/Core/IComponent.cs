@@ -1,2 +1,2 @@
-namespace MiniEngine.Engine.Components.Core;
+namespace MiniEngine.Components.Core;
 public interface IComponent;

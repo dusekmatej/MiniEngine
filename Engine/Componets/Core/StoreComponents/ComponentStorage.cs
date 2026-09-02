@@ -1,4 +1,4 @@
-using MiniEngine.Engine.Components.Core;
+using MiniEngine.Components.Core;
 
 namespace MiniEngine.Components.Core.StoreComponents;
 

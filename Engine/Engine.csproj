@@ -13,6 +13,7 @@
       <PackageReference Include="Silk.NET.Windowing" />
       <PackageReference Include="Silk.NET.Windowing.Glfw" />
       <PackageReference Include="Silk.NET.OpenGL" />
+      <PackageReference Include="StbTrueTypeSharp" />
     </ItemGroup>
 
     <ItemGroup>

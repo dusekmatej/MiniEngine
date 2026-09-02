@@ -1,7 +1,8 @@
+using MiniEngine.Core;
 using MiniEngine.Graphics;
 using MiniEngine.Systems.Core;
 
-namespace MiniEngine.Core;
+namespace MiniEngine;
 
 public class Engine
 {

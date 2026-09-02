@@ -62,12 +62,33 @@ public class Renderer : IGraphicsBackend
         FragColor = uColor;
     }
     ";
+    private const string TextFragmentShaderSource = @"
+    #version 330 core
+
+    out vec4 FragColor;
+
+    in vec2 TexCoord;
+
+    uniform sampler2D uTexture;
+    uniform vec4 uColor;
+
+    void main()
+    {
+        float alpha = texture(uTexture, TexCoord).a;
+
+        FragColor = vec4(
+            uColor.rgb,
+            uColor.a * alpha
+        );
+    }
+    ";
     #endregion
 
     private readonly GL _gl;
     private Mesh _quad;
     private Shader _textureShader;
     private Shader _colorShader;
+    private Shader _textShader;
 
     private readonly Dictionary<int, Texture> _textures = new();
     private int _nextTextureHandle = 1;
@@ -97,6 +118,7 @@ public class Renderer : IGraphicsBackend
 
         _textureShader = new Shader(_gl, VertexShaderSource, TextureFragmentShaderSource);
         _colorShader = new Shader(_gl, VertexShaderSource, ColorFragmentShaderSource);
+        _textShader = new Shader(_gl, VertexShaderSource, TextFragmentShaderSource);
     }
 
     public void Clear()
@@ -151,6 +173,28 @@ public class Renderer : IGraphicsBackend
 
         _gl.Uniform4(colorLoc, command.Color.R, command.Color.G, command.Color.B, command.Color.A);
 
+        _quad.Bind();
+        _gl.DrawArrays(PrimitiveType.TriangleFan, 0, 4);
+    }
+
+    public unsafe void DrawText(TextDrawCommand command)
+    {
+        if (!_textures.TryGetValue(command.Texture.Value, out var texture))
+            throw new InvalidOperationException($"Texture handle {command.Texture.Value} does not exist.");
+
+        _textShader.Use();
+
+        Matrix4x4 model = Matrix4x4.CreateScale(command.Width, command.Height, 1f) * Matrix4x4.CreateTranslation(command.X, command.Y, 0f);
+
+        int modelLoc = _textShader.GetUniformLocation("uModel");
+
+        _gl.UniformMatrix4(modelLoc, 1, false, (float*)&model);
+
+        int colorLoc = _textShader.GetUniformLocation("uColor");
+
+        _gl.Uniform4(colorLoc, command.Color.R, command.Color.G, command.Color.B, command.Color.A);
+
+        texture.Bind();
         _quad.Bind();
         _gl.DrawArrays(PrimitiveType.TriangleFan, 0, 4);
     }

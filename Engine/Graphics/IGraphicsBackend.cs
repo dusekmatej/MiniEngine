@@ -8,4 +8,5 @@ public interface IGraphicsBackend
     BackendTextureHandle CreateTexture(ImageData image);
     void DrawTexture(TextureDrawCommand command);
     void DrawRectangle(RectangleDrawCommand command);
+    void DrawText(TextDrawCommand command);
 }

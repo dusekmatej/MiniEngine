@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
+namespace MiniEngine.Components.Core;
 
-namespace MiniEngine.Components.Core.StoreComponents;
-
-internal sealed class ComponentStore<T> : IComponentStore
+internal sealed class ComponentStore<T> : IComponentStorage
     where T : struct, IComponent
 {
     private int[] _sparse = [];

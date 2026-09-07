@@ -5,6 +5,8 @@ MiniEngine uses an **Entity-Component-System (ECS)** architecture. You can read 
 
 But the systems are made for editing the components or any other possible data. Instead of putting behavior directly inside components, the logic is handle by ```systems```.
 
+**See Also**: [Component System Documentation →](./ComponentSystem.md) — Learn how to create and use components with systems.
+
 ### Diagram
 ![Diagram](Images/SystemsCore.png)
 

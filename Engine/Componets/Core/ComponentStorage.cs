@@ -13,7 +13,7 @@ internal sealed class ComponentStore<T> : IComponentStorage
     public void Add(int entityIndex, T component)
     {
         if (Has(entityIndex))
-    throw new InvalidOperationException("Entity already has this component.");
+            throw new InvalidOperationException("Entity already has this component.");
 
         if (entityIndex >= _sparse.Length)
             Array.Resize(ref _sparse, Math.Max(4, entityIndex + 1));

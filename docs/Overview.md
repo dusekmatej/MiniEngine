@@ -12,6 +12,12 @@ MiniEngine is divided into smaller parts with clearly separated responsibilities
 
 Detailed documentation for each part can be opened below.
 
+### Components
+
+Components are data containers that store the state of entities in the ECS architecture. Learn how to create and use components.
+
+[Open Components Documentation →](./ComponentSystem.md)
+
 ### Systems
 
 Systems contain the behavior of the ECS architecture and process components or other engine data.
@@ -30,10 +36,18 @@ Systems contain the behavior of the ECS architecture and process components or o
 
 Short explanations of important MiniEngine concepts.
 
-### [`Update()`](./Systems/SystemsCore.md#update)
+### [`IComponent`](./ComponentSystem.md#what-are-components)
+
+Marker interface for component structs. All components must implement this interface.
+
+### [`ComponentStore<T>`](./ComponentSystem.md#component-storage-architecture)
+
+Efficient sparse-set storage for components. Enables fast lookup and cache-friendly iteration.
+
+### [`Update()`](./SystemsCore.md#update)
 
 Called during the engine update phase and used by `IUpdateSystem` implementations.
 
-### [`SystemContext`](./Systems/SystemsCore.md#systemcontext)
+### [`SystemContext`](./SystemsCore.md#systemcontext)
 
 Provides systems with the engine data they need during execution.

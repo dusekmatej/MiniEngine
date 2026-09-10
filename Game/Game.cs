@@ -52,7 +52,7 @@ public class Game : IGame
         );
 
         TileDefinitionsTest();
-        
+
         Entity testEntity = new Entity();
     }
 

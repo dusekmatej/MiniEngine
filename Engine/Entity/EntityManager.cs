@@ -1,5 +1,3 @@
-using MiniEngine.Environment;
-
 namespace MiniEngine.Entities;
 
 public class EntityManager

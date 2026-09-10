@@ -1,4 +1,4 @@
-using MiniEngine.Entity;
+using MiniEngine.Entities;
 
 namespace MiniEngine.Environment;
 

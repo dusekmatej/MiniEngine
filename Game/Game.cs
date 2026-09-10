@@ -5,6 +5,7 @@ using MiniEngine.Graphics.Presets;
 using MiniEngine.Graphics.Fonts;
 using MiniEngine.Graphics;
 using MiniEngine.Core;
+using MiniEngine.Entities;
 
 namespace MiniEngine.Game;
 
@@ -75,6 +76,8 @@ public class Game : IGame
         // Tests
         TileDefinitionsTest();
         FontTest();
+
+        Entity testEntity = new Entity();
     }
 
     public void Update(float deltaTime)

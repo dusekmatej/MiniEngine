@@ -1,4 +1,4 @@
-namespace MiniEngine.Entity;
+namespace MiniEngine.Entities;
 
 public class EntityManager
 {

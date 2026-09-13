@@ -1,4 +1,5 @@
 using MiniEngine.Core;
+using System.Numerics;
 
 namespace MiniEngine.Graphics.Fonts;
 
@@ -7,7 +8,7 @@ internal sealed class TextRenderer
     private const float RasterHeight = 64f;
 
     private readonly IGraphicsBackend _graphics;
-    private readonly TextureManager _textureManager;
+    private readonly TextureAssets _textureAssets;
     private readonly RasterizeFont _rasterizer;
 
     private readonly Dictionary<
@@ -16,11 +17,11 @@ internal sealed class TextRenderer
 
     public TextRenderer(
         IGraphicsBackend graphics,
-        TextureManager textureManager,
+        TextureAssets textureAssets,
         FontManager fontManager)
     {
         _graphics = graphics;
-        _textureManager = textureManager;
+        _textureAssets = textureAssets;
 
         _rasterizer = new RasterizeFont(
             fontManager
@@ -33,7 +34,10 @@ internal sealed class TextRenderer
         float x,
         float y,
         float height,
-        EngineColor color)
+        EngineColor color,
+        float rotation,
+        Vector2 commandScale,
+        int layer)
     {
         if (string.IsNullOrEmpty(text))
             return;
@@ -46,7 +50,7 @@ internal sealed class TextRenderer
             );
         }
 
-        float scale =
+        float rasterScale =
             height / RasterHeight;
 
         float cursorX = x;
@@ -59,23 +63,23 @@ internal sealed class TextRenderer
             if (glyph.Texture is not null)
             {
                 BackendTextureHandle backendTexture =
-                    _textureManager.GetBackendHandle(
+                    _textureAssets.GetBackendHandle(
                         glyph.Texture.Value
                     );
 
                 float drawX =
                     cursorX +
-                    glyph.OffsetX * scale;
+                    glyph.OffsetX * rasterScale;
 
                 float drawY =
                     y -
-                    (glyph.OffsetY + glyph.Height) * scale;
+                    (glyph.OffsetY + glyph.Height) * rasterScale;
 
                 float drawWidth =
-                    glyph.Width * scale;
+                    glyph.Width * rasterScale;
 
                 float drawHeight =
-                    glyph.Height * scale;
+                    glyph.Height * rasterScale;
 
                 var command =
                     new TextDrawCommand(
@@ -84,14 +88,17 @@ internal sealed class TextRenderer
                         drawY,
                         drawWidth,
                         drawHeight,
-                        color
+                        color,
+                        rotation,
+                        commandScale,
+                        layer
                     );
 
                 _graphics.DrawText(command);
             }
 
             cursorX +=
-                glyph.Advance * scale;
+                glyph.Advance * rasterScale;
         }
     }
 
@@ -126,7 +133,7 @@ internal sealed class TextRenderer
                 CreateGlyphImage(rasterized);
 
             texture =
-                _textureManager.Load(
+                _textureAssets.Load(
                     $"font_{font.Index}_glyph_{(int)character}",
                     image
                 );

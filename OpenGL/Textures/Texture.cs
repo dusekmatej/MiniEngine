@@ -3,7 +3,7 @@ using Silk.NET.OpenGL;
 
 namespace MiniEngine.OpenGL.Textures;
 
-public class Texture
+public class Texture : IDisposable
 {
     private readonly GL _gl;
 
@@ -59,6 +59,11 @@ public class Texture
     public void Bind()
     {
         _gl.BindTexture(TextureTarget.Texture2D, Handle);
+    }
+
+    public void Dispose()
+    {
+        _gl.DeleteTexture(Handle);
     }
 
 }

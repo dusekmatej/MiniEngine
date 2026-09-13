@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace MiniEngine.Graphics;
 
-public readonly record struct RectangleDrawCommand
+public readonly record struct TriangleDrawCommand
 {
     public float X { get; }
     public float Y { get; }
@@ -13,33 +13,15 @@ public readonly record struct RectangleDrawCommand
     public Vector2 Scale { get; }
     public int Layer { get; }
 
-    public RectangleDrawCommand(
-        float x,
-        float y,
-        float width,
-        float height,
-        EngineColor color)
-        : this(
-            x,
-            y,
-            width,
-            height,
-            color,
-            0f,
-            Vector2.One,
-            0)
-    {
-    }
-
-    public RectangleDrawCommand(
+    public TriangleDrawCommand(
         float x,
         float y,
         float width,
         float height,
         EngineColor color,
-        float rotation,
-        Vector2 scale,
-        int layer)
+        float rotation = 0f,
+        Vector2? scale = null,
+        int layer = 0)
     {
         X = x;
         Y = y;
@@ -47,7 +29,7 @@ public readonly record struct RectangleDrawCommand
         Height = height;
         Color = color;
         Rotation = rotation;
-        Scale = scale;
+        Scale = scale ?? Vector2.One;
         Layer = layer;
     }
 }

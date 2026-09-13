@@ -14,6 +14,6 @@ public class BackendFactory : IGraphicsBackendFactory
 
         var gl = GL.GetApi(nativeContext);
 
-        return new Renderer(gl);
+        return new Renderer(gl, context.Width, context.Height);
     }
 }

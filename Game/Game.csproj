@@ -6,17 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Silk.NET.Input" />
-      <PackageReference Include="Silk.NET.Maths" />
-      <PackageReference Include="Silk.NET.OpenGL" />
-      <PackageReference Include="Silk.NET.Windowing" />
-      <PackageReference Include="StbTrueTypeSharp" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Engine\Engine.csproj" />
-      <ProjectReference Include="..\Database\Database.csproj" />
-      <ProjectReference Include="..\OpenGL\OpenGL.csproj" />
     </ItemGroup>
 
     <ItemGroup>

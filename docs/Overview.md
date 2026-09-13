@@ -20,6 +20,12 @@ Systems contain the behavior of the ECS architecture and process components or o
 
 ---
 
+### Rendering API
+
+[Open Rendering API Documentation →](./rendering-api.md)
+
+---
+
 ## Concepts
 
 Short explanations of important MiniEngine concepts.

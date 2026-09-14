@@ -87,7 +87,39 @@ graphics.DrawLine(-0.5f, 0f, 0.5f, 0.3f, 0.02f, EngineColor.Red);
 graphics.DrawSprite(texture, 0f, 0f, 0.25f, 0.25f, EngineColor.White);
 ```
 
+Outlines are composed from line commands, and circles can be filled or outlined:
+
+```csharp
+var panel = new Rectangle(-0.8f, -0.4f, 0.6f, 0.3f);
+
+graphics.DrawRectangleOutline(panel, EngineColor.White, thickness: 0.01f);
+graphics.DrawCircle(new Vector2(0.5f, 0.2f), 0.1f, EngineColor.Cyan, filled: false);
+```
+
+Immediate UI controls use the same primitives and the current neutral mouse state:
+
+```csharp
+bool clicked = graphics.DrawButton(
+	new Rectangle(-0.4f, -0.2f, 0.35f, 0.12f),
+	"Start",
+	EngineColor.Green,
+	EngineColor.White,
+	font
+);
+
+graphics.DrawLabel(
+	new Vector2(-0.8f, 0.7f),
+	"Debug overlay",
+	EngineColor.White,
+	font
+);
+```
+
+`Engine` updates `Graphics2D` through `SetMouseState` before each game render. Button bounds and mouse positions use the same normalized 2D coordinate space.
+
 `DrawSprite` uses the existing texture draw command and `TextureAssets` cache. Text remains available through `DrawText` and the existing glyph rasterization path. The `layer` value is carried by every command; immediate rendering preserves submission order, while the value is ready for a later ordering policy.
+
+`Graphics2D.SetMouseState` accepts the current mouse position and left-button state in the same normalized 2D coordinate space used by `Rectangle` bounds. `DrawButton` draws its background, outline, and label, then returns `true` while the left button is down inside the bounds.
 
 ## Textures
 

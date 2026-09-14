@@ -286,7 +286,15 @@ public class Renderer : IGraphicsBackend
                 0f
             );
 
-        DrawColoredShape(vertices, segmentCount + 2, PrimitiveType.TriangleFan, model, command.Color);
+        PrimitiveType primitiveType = command.Filled
+            ? PrimitiveType.TriangleFan
+            : PrimitiveType.LineLoop;
+
+        int vertexCount = command.Filled
+            ? segmentCount + 2
+            : segmentCount + 1;
+
+        DrawColoredShape(vertices, vertexCount, primitiveType, model, command.Color);
     }
 
     public void DrawLine(LineDrawCommand command)

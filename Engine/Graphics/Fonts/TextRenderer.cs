@@ -7,7 +7,7 @@ internal sealed class TextRenderer
 {
     private const float RasterHeight = 64f;
 
-    private readonly IGraphicsBackend _graphics;
+    private readonly Action<TextDrawCommand> _submitText;
     private readonly TextureAssets _textureAssets;
     private readonly RasterizeFont _rasterizer;
 
@@ -16,11 +16,11 @@ internal sealed class TextRenderer
         CachedGlyph> _glyphs = new();
 
     public TextRenderer(
-        IGraphicsBackend graphics,
+        Action<TextDrawCommand> submitText,
         TextureAssets textureAssets,
         FontManager fontManager)
     {
-        _graphics = graphics;
+        _submitText = submitText;
         _textureAssets = textureAssets;
 
         _rasterizer = new RasterizeFont(
@@ -94,7 +94,7 @@ internal sealed class TextRenderer
                         layer
                     );
 
-                _graphics.DrawText(command);
+                _submitText(command);
             }
 
             cursorX +=

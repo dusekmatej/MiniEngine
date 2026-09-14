@@ -2,6 +2,8 @@ using MiniEngine.Core;
 using MiniEngine.Graphics;
 using MiniEngine.Graphics.Fonts;
 using MiniEngine.Systems.Core;
+using Silk.NET.Input;
+using System.Numerics;
 
 namespace MiniEngine;
 
@@ -18,6 +20,7 @@ public class Engine
     private TextureAssets? _textureAssets;
     private FontManager? _fontManager;
     private Graphics2D? _drawing;
+    private IInputContext? _input;
 
     // TESTING FIELD FOR SYSTEMS
     public Engine(
@@ -52,6 +55,7 @@ public class Engine
         );
 
         _graphics = _graphicsFactory.Create(context);
+        _input = _window.NativeWindow.CreateInput();
         _textureAssets = new TextureAssets(_graphics, _assetSource);
         _fontManager = new FontManager();
         _drawing = new Graphics2D(_graphics, _textureAssets, _fontManager);
@@ -79,8 +83,31 @@ public class Engine
 
         _graphics.BeginFrame();
         _graphics.Clear();
+
+        UpdateMouseState();
         _game.Render();
+        _drawing?.Flush();
         _graphics.EndFrame();
+    }
+
+    private void UpdateMouseState()
+    {
+        if (_drawing is null || _input is null || _input.Mice.Count == 0)
+            return;
+
+        var mouse = _input.Mice[0];
+        float width = _window.NativeWindow.Size.X;
+        float height = _window.NativeWindow.Size.Y;
+
+        var position = new Vector2(
+            mouse.Position.X / width * 2f - 1f,
+            1f - mouse.Position.Y / height * 2f
+        );
+
+        _drawing.SetMouseState(
+            position,
+            mouse.IsButtonPressed(MouseButton.Left)
+        );
     }
 
 }

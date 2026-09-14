@@ -2,52 +2,15 @@ using System.Numerics;
 
 namespace MiniEngine.Graphics;
 
-public readonly record struct RectangleDrawCommand
+public readonly record struct RectangleDrawCommand(
+    float X,
+    float Y,
+    float Width,
+    float Height,
+    EngineColor Color,
+    float Rotation = 0f,
+    Vector2 Scale = default,
+    int Layer = 0)
 {
-    public float X { get; }
-    public float Y { get; }
-    public float Width { get; }
-    public float Height { get; }
-    public EngineColor Color { get; }
-    public float Rotation { get; }
-    public Vector2 Scale { get; }
-    public int Layer { get; }
-
-    public RectangleDrawCommand(
-        float x,
-        float y,
-        float width,
-        float height,
-        EngineColor color)
-        : this(
-            x,
-            y,
-            width,
-            height,
-            color,
-            0f,
-            Vector2.One,
-            0)
-    {
-    }
-
-    public RectangleDrawCommand(
-        float x,
-        float y,
-        float width,
-        float height,
-        EngineColor color,
-        float rotation,
-        Vector2 scale,
-        int layer)
-    {
-        X = x;
-        Y = y;
-        Width = width;
-        Height = height;
-        Color = color;
-        Rotation = rotation;
-        Scale = scale;
-        Layer = layer;
-    }
+    public Vector2 Scale { get; init; } = Scale == default ? Vector2.One : Scale;
 }

@@ -8,6 +8,20 @@ public sealed class Graphics2D
     private readonly IGraphicsBackend _graphics;
     private readonly TextureAssets _textureAssets;
     private readonly TextRenderer _textRenderer;
+    private readonly List<QueuedCommand> _commands = new();
+
+    public Vector2 MousePosition { get; private set; }
+    public bool IsLeftMouseButtonPressed { get; private set; }
+
+    private sealed class QueuedCommand
+    {
+        public RectangleDrawCommand? Rectangle { get; init; }
+        public TriangleDrawCommand? Triangle { get; init; }
+        public CircleDrawCommand? Circle { get; init; }
+        public LineDrawCommand? Line { get; init; }
+        public TextureDrawCommand? Texture { get; init; }
+        public TextDrawCommand? Text { get; init; }
+    }
 
     public Graphics2D(
         IGraphicsBackend graphics,
@@ -18,10 +32,39 @@ public sealed class Graphics2D
         _textureAssets = textureAssets;
 
         _textRenderer = new TextRenderer(
-            graphics,
+            QueueText,
             textureAssets,
             fontManager
         );
+    }
+
+    public void SetMouseState(
+        Vector2 mousePosition,
+        bool isLeftMouseButtonPressed)
+    {
+        MousePosition = mousePosition;
+        IsLeftMouseButtonPressed = isLeftMouseButtonPressed;
+    }
+
+    public void Flush()
+    {
+        foreach (QueuedCommand queuedCommand in _commands)
+        {
+            if (queuedCommand.Rectangle is RectangleDrawCommand rectangle)
+                _graphics.DrawRectangle(rectangle);
+            else if (queuedCommand.Triangle is TriangleDrawCommand triangle)
+                _graphics.DrawTriangle(triangle);
+            else if (queuedCommand.Circle is CircleDrawCommand circle)
+                _graphics.DrawCircle(circle);
+            else if (queuedCommand.Line is LineDrawCommand line)
+                _graphics.DrawLine(line);
+            else if (queuedCommand.Texture is TextureDrawCommand texture)
+                _graphics.DrawTexture(texture);
+            else if (queuedCommand.Text is TextDrawCommand text)
+                _graphics.DrawText(text);
+        }
+
+        _commands.Clear();
     }
 
     public void DrawRectangle(
@@ -34,7 +77,7 @@ public sealed class Graphics2D
         Vector2? scale = null,
         int layer = 0)
     {
-        _graphics.DrawRectangle(
+        QueueRectangle(
             new RectangleDrawCommand(
                 x,
                 y,
@@ -45,6 +88,57 @@ public sealed class Graphics2D
                 scale ?? Vector2.One,
                 layer
             )
+        );
+    }
+
+    public void DrawRectangle(
+        Rectangle bounds,
+        EngineColor color,
+        int layer = 0)
+    {
+        DrawRectangle(
+            bounds.X,
+            bounds.Y,
+            bounds.Width,
+            bounds.Height,
+            color,
+            layer: layer
+        );
+    }
+
+    public void DrawRectangleOutline(
+        Rectangle bounds,
+        EngineColor color,
+        float thickness = 1f,
+        int layer = 0)
+    {
+        DrawLine(
+            new Vector2(bounds.X, bounds.Y),
+            new Vector2(bounds.X + bounds.Width, bounds.Y),
+            color,
+            thickness,
+            layer
+        );
+        DrawLine(
+            new Vector2(bounds.X + bounds.Width, bounds.Y),
+            new Vector2(bounds.X + bounds.Width, bounds.Y + bounds.Height),
+            color,
+            thickness,
+            layer
+        );
+        DrawLine(
+            new Vector2(bounds.X + bounds.Width, bounds.Y + bounds.Height),
+            new Vector2(bounds.X, bounds.Y + bounds.Height),
+            color,
+            thickness,
+            layer
+        );
+        DrawLine(
+            new Vector2(bounds.X, bounds.Y + bounds.Height),
+            new Vector2(bounds.X, bounds.Y),
+            color,
+            thickness,
+            layer
         );
     }
 
@@ -62,7 +156,7 @@ public sealed class Graphics2D
         BackendTextureHandle backendTexture =
             _textureAssets.GetBackendHandle(texture);
 
-        _graphics.DrawTexture(
+        QueueTexture(
             new TextureDrawCommand(
                 backendTexture,
                 x,
@@ -111,7 +205,7 @@ public sealed class Graphics2D
         Vector2? scale = null,
         int layer = 0)
     {
-        _graphics.DrawTriangle(
+        QueueTriangle(
             new TriangleDrawCommand(
                 x,
                 y,
@@ -119,7 +213,7 @@ public sealed class Graphics2D
                 height,
                 color,
                 rotation,
-                scale,
+                scale ?? Vector2.One,
                 layer
             )
         );
@@ -130,16 +224,18 @@ public sealed class Graphics2D
         float y,
         float radius,
         EngineColor color,
+        bool filled = true,
         Vector2? scale = null,
         int layer = 0)
     {
-        _graphics.DrawCircle(
+        QueueCircle(
             new CircleDrawCommand(
                 x,
                 y,
                 radius,
                 color,
-                scale,
+                filled,
+                scale ?? Vector2.One,
                 layer
             )
         );
@@ -154,16 +250,80 @@ public sealed class Graphics2D
         EngineColor color,
         int layer = 0)
     {
-        _graphics.DrawLine(
+        DrawLine(
+            new Vector2(startX, startY),
+            new Vector2(endX, endY),
+            color,
+            thickness,
+            layer
+        );
+    }
+
+    public void DrawLine(
+        Vector2 start,
+        Vector2 end,
+        EngineColor color,
+        float thickness = 1f,
+        int layer = 0)
+    {
+        QueueLine(
             new LineDrawCommand(
-                startX,
-                startY,
-                endX,
-                endY,
+                start.X,
+                start.Y,
+                end.X,
+                end.Y,
                 thickness,
                 color,
                 layer
             )
+        );
+    }
+
+    public bool DrawButton(
+        Rectangle bounds,
+        string text,
+        EngineColor backgroundColor,
+        EngineColor textColor,
+        FontAssetHandle fontHandle)
+    {
+        bool isHovered = bounds.Contains(MousePosition);
+        bool isPressed = IsLeftMouseButtonPressed && isHovered;
+
+        EngineColor buttonColor = isPressed
+            ? EngineColor.FromNormalized(0.08f, 0.18f, 0.35f)
+            : isHovered
+                ? EngineColor.FromNormalized(0.15f, 0.35f, 0.75f)
+                : backgroundColor;
+
+        DrawRectangle(bounds, buttonColor, layer: 3);
+        DrawRectangleOutline(bounds, textColor, 0.02f, layer: 4);
+
+        DrawText(
+            fontHandle,
+            text,
+            bounds.X + bounds.Width * 0.20f,
+            bounds.Y + bounds.Height * 0.27f,
+            bounds.Height * 0.40f,
+            textColor,
+            layer: 5
+        );
+
+        return isPressed;
+    }
+
+    public void DrawLabel(
+        Vector2 position,
+        string text,
+        EngineColor color,
+        FontAssetHandle fontHandle)
+    {
+        DrawText(
+            fontHandle,
+            text,
+            position.X,
+            position.Y,
+            0.08f,
+            color
         );
     }
 
@@ -190,4 +350,22 @@ public sealed class Graphics2D
             layer
         );
     }
+
+    private void QueueRectangle(RectangleDrawCommand command)
+        => _commands.Add(new QueuedCommand { Rectangle = command });
+
+    private void QueueTexture(TextureDrawCommand command)
+        => _commands.Add(new QueuedCommand { Texture = command });
+
+    private void QueueTriangle(TriangleDrawCommand command)
+        => _commands.Add(new QueuedCommand { Triangle = command });
+
+    private void QueueCircle(CircleDrawCommand command)
+        => _commands.Add(new QueuedCommand { Circle = command });
+
+    private void QueueLine(LineDrawCommand command)
+        => _commands.Add(new QueuedCommand { Line = command });
+
+    private void QueueText(TextDrawCommand command)
+        => _commands.Add(new QueuedCommand { Text = command });
 }

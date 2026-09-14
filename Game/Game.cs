@@ -38,7 +38,7 @@ public class Game : IGame
 
         Console.WriteLine("Game: Initializing game...");
 
-        _tileTexture = textureAssets.Load("tile_000");
+        _tileTexture = textureAssets.Load("tile_022");
 
         string fontPath = Path.Combine(
             AppContext.BaseDirectory,
@@ -65,7 +65,7 @@ public class Game : IGame
         if (_drawing is null || _debugFont is null)
             throw new Exception("Game: Drawing or debug font is not initialized.");
 
-        DrawPremadeItems();
+        DrawPlatform();
     }
 
     private void DrawPremadeItems()

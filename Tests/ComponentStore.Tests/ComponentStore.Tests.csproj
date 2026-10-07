@@ -9,6 +9,7 @@
         <Compile Include="../../Engine/Entity/Entity.cs" Link="Engine/Entity.cs" />
         <Compile Include="../../Engine/Components/Core/ComponentStore.cs" Link="Engine/ComponentStore.cs" />
         <Compile Include="../../Engine/Components/Core/IComponentStore.cs" Link="Engine/IComponentStore.cs" />
-        <Compile Include="../../Engine/Components/Core/ComponentStoreManager.cs" Link="Engine/ComponentStoreManager.cs" />
+        <Compile Include="../../Engine/Components/Core/ComponentStoreRegistry.cs" Link="Engine/ComponentStoreRegistry.cs" />
+        <Compile Include="../../Engine/Components/Core/Components.cs" Link="Engine/Components.cs" />
     </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@ namespace MiniEngine.Components.Core;
 internal sealed class ComponentStore<T> where T : struct
 {
     private T[] _components;
-    private int[] _entities;
+    private uint[] _entities;
     private int[] _sparse;
     private int _count;
 
@@ -14,7 +14,7 @@ internal sealed class ComponentStore<T> where T : struct
     public ComponentStore(int capacity = 16)
     {
         _components = new T[capacity];
-        _entities = new int[capacity];
+        _entities = new uint[capacity];
         _sparse = new int[capacity];
 
         Array.Fill(_sparse, -1);
@@ -22,7 +22,7 @@ internal sealed class ComponentStore<T> where T : struct
 
     public bool Has(Entity entity)
     {
-        int id = entity.Id;
+        uint id = entity.Id;
 
         if ((uint)id >= (uint)_sparse.Length)
             return false;
@@ -36,7 +36,10 @@ internal sealed class ComponentStore<T> where T : struct
 
     public void Add(Entity entity, T component)
     {
-        EnsureSparseCapacity(entity.Id);
+        if (entity.Id >= (uint)Array.MaxLength)
+            throw new ArgumentOutOfRangeException(nameof(entity), "Entity ID exceeds supported storage capacity.");
+
+        EnsureSparseCapacity((int)entity.Id);
 
         if (Has(entity))
         {
@@ -74,7 +77,7 @@ internal sealed class ComponentStore<T> where T : struct
         {
             _components[removedIndex] = _components[lastIndex];
 
-            int movedEntity = _entities[lastIndex];
+            uint movedEntity = _entities[lastIndex];
             _entities[removedIndex] = movedEntity;
             _sparse[movedEntity] = removedIndex;
         }

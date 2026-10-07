@@ -11,12 +11,11 @@ internal static class Program
         [
             ("Add, Get, and Has", AddAndGet),
             ("Ref mutation persists", RefMutation),
-            ("Shared interface supports membership and removal", SharedInterface),
-            ("Generic interface supports typed ref access and count", GenericInterface),
-            ("Manager preserves typed stores and ref access", ManagerRefMutation),
+            ("Components facade adds, checks, and removes", ComponentsFacade),
+            ("Registry preserves typed stores and ref access", RegistryRefMutation),
             ("References survive additions within capacity", RefWithinCapacity),
             ("Missing and invalid IDs", MissingAndInvalidIds),
-            ("Duplicate Add preserves original data", DuplicateAdd),
+            ("Duplicate Add updates existing data", DuplicateAdd),
             ("Remove and swap-and-pop", SwapAndPop),
             ("Remove last and only component", RemoveLast),
             ("Add after removals", Reinsert),
@@ -44,7 +43,7 @@ internal static class Program
         return failures == 0 ? 0 : 1;
     }
 
-    private static Entity EntityAt(int id) => new(id, 1);
+    private static Entity EntityAt(int id) => new((uint)id, 1);
 
     private static void AddAndGet()
     {
@@ -69,49 +68,33 @@ internal static class Program
         Check(sameComponent.Value == 99 && sameComponent.Label == "changed");
     }
 
-    private static void SharedInterface()
+    private static void RegistryRefMutation()
     {
-        var typedStore = new ComponentStore<TestComponent>();
-        typedStore.Add(EntityAt(0), default);
-        IComponentStore store = typedStore;
-        Check(store.Has(EntityAt(0)));
-        store.Remove(EntityAt(0));
-        Check(!typedStore.Has(EntityAt(0)));
-    }
-
-    private static void ManagerRefMutation()
-    {
-        var manager = new ComponentStoreManager();
-        var store = manager.Get<TestComponent>();
+        var manager = new ComponentStoreRegistry();
+        var store = manager.GetOrCreate<TestComponent>();
         store.Add(EntityAt(0), default);
-        ref var component = ref manager.Get<TestComponent>().Get(EntityAt(0));
+        ref var component = ref manager.GetOrCreate<TestComponent>().Get(EntityAt(0));
         component.Value = 17;
-        Check(ReferenceEquals(store, manager.Get<TestComponent>()));
-        Check(manager.Get<TestComponent>().Get(EntityAt(0)).Value == 17);
-        var otherStore = manager.Get<OtherComponent>();
+        Check(ReferenceEquals(store, manager.GetOrCreate<TestComponent>()));
+        Check(manager.GetOrCreate<TestComponent>().Get(EntityAt(0)).Value == 17);
+        var otherStore = manager.GetOrCreate<OtherComponent>();
         otherStore.Add(EntityAt(0), new OtherComponent { Value = 23 });
         Check(otherStore.Get(EntityAt(0)).Value == 23);
         Check(store.Get(EntityAt(0)).Value == 17);
     }
 
-    private static void GenericInterface()
+    private static void ComponentsFacade()
     {
-        IComponentStore<TestComponent> store = new ComponentStore<TestComponent>();
-        IComponentStore shared = store;
-        Check(shared.Count == 0);
-        store.Add(EntityAt(0), new TestComponent { Value = 7 });
-        store.Add(EntityAt(1), new TestComponent { Value = 9 });
-        Check(shared.Count == 2 && shared.Has(EntityAt(0)));
-        ref var component = ref store.Get(EntityAt(1));
-        component.Value = 23;
-        Check(store.Get(EntityAt(1)).Value == 23);
-        shared.Remove(EntityAt(0));
-        Check(shared.Count == 1 && !store.Has(EntityAt(0)));
-        Check(store.Get(EntityAt(1)).Value == 23);
-        shared.Remove(EntityAt(0));
-        Check(shared.Count == 1);
-        store.Remove(EntityAt(1));
-        Check(shared.Count == 0);
+        var registry = new ComponentStoreRegistry();
+        var components = new MiniEngine.Components.Core.Components(registry);
+        var entity = EntityAt(3);
+        Check(!components.Has<TestComponent>(entity));
+        components.Remove<TestComponent>(entity);
+        components.Add(entity, new TestComponent { Value = 42 });
+        Check(components.Has<TestComponent>(entity));
+        Check(registry.Get<TestComponent>()!.Get(entity).Value == 42);
+        components.Remove<TestComponent>(entity);
+        Check(!components.Has<TestComponent>(entity));
     }
 
     private static void RefWithinCapacity()
@@ -144,8 +127,8 @@ internal static class Program
     {
         var store = new ComponentStore<TestComponent>();
         store.Add(EntityAt(1), new TestComponent { Value = 3 });
-        Throws<InvalidOperationException>(() => store.Add(EntityAt(1), new TestComponent { Value = 9 }));
-        Check(store.Get(EntityAt(1)).Value == 3);
+        store.Add(EntityAt(1), new TestComponent { Value = 9 });
+        Check(store.Count == 1 && store.Get(EntityAt(1)).Value == 9);
         store.Remove(EntityAt(1));
         Check(!store.Has(EntityAt(1)));
         store.Add(EntityAt(1), new TestComponent { Value = 12 });

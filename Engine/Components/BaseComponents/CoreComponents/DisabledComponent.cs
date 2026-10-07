@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct DisabledComponent : IComponent
+public struct DisabledComponent
 {
     public bool IsDisabled;
 }

@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct OpacityComponent : IComponent
+public struct OpacityComponent
 {
     public float Opacity;
 }

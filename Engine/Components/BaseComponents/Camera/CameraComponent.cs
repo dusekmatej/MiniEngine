@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct CameraComponent : IComponent
+public struct CameraComponent
 {
     public float Zoom;
     public bool IsActive;

@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct BoxColliderComponent : IComponent
+public struct BoxColliderComponent
 {
     public float Width;
     public float Height;

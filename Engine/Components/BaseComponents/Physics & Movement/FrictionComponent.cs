@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct FrictionComponent : IComponent
+public struct FrictionComponent
 {
     public float Friction;
 }

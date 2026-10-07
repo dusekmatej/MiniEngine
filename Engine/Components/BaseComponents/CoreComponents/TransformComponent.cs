@@ -1,9 +1,8 @@
 using System.Numerics;
-using MiniEngine.Components.Core;
 
 namespace MiniEngine.Components;
 
-public struct TransformComponent : IComponent
+public struct TransformComponent
 {
     public float X;
     public float Y;

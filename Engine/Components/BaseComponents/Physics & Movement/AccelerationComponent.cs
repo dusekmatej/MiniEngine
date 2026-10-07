@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct AccelerationComponent : IComponent
+public struct AccelerationComponent
 {
     public float X;
     public float Y;

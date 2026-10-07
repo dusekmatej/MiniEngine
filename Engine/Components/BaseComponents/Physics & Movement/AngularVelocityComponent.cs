@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct AngularVelocityComponent : IComponent
+public struct AngularVelocityComponent
 {
     public float AngularVelocity;
 }

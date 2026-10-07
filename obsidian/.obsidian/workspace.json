@@ -1,0 +1,213 @@
+{
+  "main": {
+    "id": "224237b2779a5ebd",
+    "type": "split",
+    "children": [
+      {
+        "id": "c0fb894d7b6abcb8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6b53fc68edf6007f",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "119d0573d40c3d7b",
+    "type": "split",
+    "children": [
+      {
+        "id": "2b7674a22431fe04",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "07300e192c6cfc51",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "de9fa91ac74caaa8",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "4fa92f483c0ec76c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "2931e946dbe8b81b",
+    "type": "split",
+    "children": [
+      {
+        "id": "26583018253fcafa",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "db3786dc79a73469",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "4ce853c5bd20c0ce",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "42734273fbe98a76",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "148513c8a552653e",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "35c1b1137f16f132",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "6b53fc68edf6007f",
+  "lastOpenFiles": [
+    "Ideas/Inbox.md",
+    "Development/Sessions/2026-10-04 Vault inventory.md",
+    "Project/Decisions/Graphics go through engine contracts.md",
+    "Project/Decisions/Systems are discovered automatically.md",
+    "Project/Decisions/Entity handles carry generations.md",
+    "Development/Problems/ECS integration is incomplete.md",
+    "Development/Problems/Documentation and implementation drift.md",
+    "Development/Problems/Build baseline fails without diagnostics.md",
+    "Knowledge/CSharp/Project Settings.md",
+    "Knowledge/Math/Isometric Projection.md",
+    "Knowledge/Graphics/Isometric Tile Sample.md",
+    "Knowledge/Graphics/Text Rendering.md",
+    "Knowledge/Graphics/Texture Lifecycle.md",
+    "Knowledge/OpenGL/Renderer Backend.md",
+    "Knowledge/ECS/System Discovery.md",
+    "Knowledge/ECS/Component Stores.md",
+    "Knowledge/ECS/Entity Handles.md",
+    "Project/How to Investigate.md",
+    "Project/History.md",
+    "Project/Implementation and Plan.md",
+    "Project/Assets and Content.md",
+    "Project/Runtime Flow.md",
+    "Project/Codebase Map.md",
+    "AI_CONTEXT.md",
+    "Project/Roadmap.md",
+    "Project/Decisions.md"
+  ]
+}

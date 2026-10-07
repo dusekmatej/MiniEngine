@@ -1,9 +1,8 @@
 using System.Numerics;
-using MiniEngine.Components.Core;
 
 namespace MiniEngine.Components;
 
-public struct WorldTransformComponent : IComponent
+public struct WorldTransformComponent
 {
     public float Rotation;
     public Vector2 Scale;

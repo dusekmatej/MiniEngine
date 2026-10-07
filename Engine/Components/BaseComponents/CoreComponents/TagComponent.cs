@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct TagComponent : IComponent
+public struct TagComponent
 {
     public string Tag;
 }

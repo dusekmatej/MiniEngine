@@ -1,9 +1,8 @@
 using System.Numerics;
-using MiniEngine.Components.Core;
 
 namespace MiniEngine.Components;
 
-public struct TintComponent : IComponent
+public struct TintComponent
 {
     public Vector4 Tint;
 }

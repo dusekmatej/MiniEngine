@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct MovementConstrainComponent : IComponent
+public struct MovementConstrainComponent
 {
     public bool ConstrainX;
     public bool ConstrainY;

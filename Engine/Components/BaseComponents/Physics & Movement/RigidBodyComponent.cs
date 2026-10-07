@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct RigidBodyComponent : IComponent
+public struct RigidBodyComponent
 {
     public float Mass;
     public bool UseGravity;

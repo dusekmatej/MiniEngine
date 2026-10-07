@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct VisibilityComponent : IComponent
+public struct VisibilityComponent
 {
     public bool IsVisible;
 }

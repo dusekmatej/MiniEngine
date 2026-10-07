@@ -11,16 +11,15 @@ Think of it this way:
 
 ## What Are Components?
 
-Components are simple C# structs that implement the `IComponent` marker interface. They contain **only data** — no logic or methods.
+Components are simple C# structs. They contain **only data** — no logic or methods.
 
 ### Basic Component Example
 
 ```csharp
-using MiniEngine.Components.Core;
 
 namespace MiniEngine.Components;
 
-public struct VelocityComponent : IComponent
+public struct VelocityComponent
 {
     public float X;
     public float Y;
@@ -28,7 +27,7 @@ public struct VelocityComponent : IComponent
 }
 ```
 
-That's it! A component is just a struct with fields. The `IComponent` interface tells the engine that this struct is a component.
+That's it! A component is just a struct with fields. Component stores accept any struct through their generic type parameter.
 
 ### Common Built-in Components
 
@@ -43,18 +42,17 @@ MiniEngine comes with several pre-made components:
 
 ## How to Create a New Component
 
-1. **Create a struct** that implements `IComponent`
+1. **Create a struct**
 2. **Add only data fields** — no methods or properties
 3. **Use simple types**: `float`, `int`, `Vector2`, `string`, etc.
 
 ### Example: Health Component
 
 ```csharp
-using MiniEngine.Components.Core;
 
 namespace MiniEngine.Components;
 
-public struct HealthComponent : IComponent
+public struct HealthComponent
 {
     public float CurrentHealth;
     public float MaxHealth;
@@ -65,12 +63,11 @@ public struct HealthComponent : IComponent
 ### Example: Sprite Component
 
 ```csharp
-using MiniEngine.Components.Core;
 using MiniEngine.Graphics;
 
 namespace MiniEngine.Components;
 
-public struct SpriteComponent : IComponent
+public struct SpriteComponent
 {
     public TextureAssetHandle TextureHandle;
     public int Width;
@@ -100,22 +97,45 @@ This means:
 You don't need to interact with storage directly, but here's how it works:
 
 ```csharp
-internal sealed class ComponentStore<T> : IComponentStorage
-    where T : struct, IComponent
+internal sealed class ComponentStore<T> : IComponentStore<T>
+    where T : struct
 {
     private int[] _sparse;              // Maps entity index → dense index
-    private int[] _denseEntities;       // Entity IDs in order
+    private Entity[] _denseEntities;    // Entity identifiers in order
     private T[] _denseComponents;       // Component data in order
+    private int _count;                 // Number of active dense entries
+    public int Count => _count;
     
-    public ref T Get(int entityIndex);           // Get mutable reference
-    public bool Has(int entityIndex);            // Check if entity has this component
-    public void Add(int entityIndex, T component);  // Add component to entity
-    public bool Remove(int entityIndex);         // Remove component from entity
-    public bool TryGet(int entityIndex, out T component);  // Safe get
+    public ref T Get(Entity entity);             // Get mutable reference
+    public bool Has(Entity entity);              // Check membership
+    public void Add(Entity entity, T component); // Throws on duplicate or invalid ID
+    public void Remove(Entity entity);           // Swap-and-pop; missing entity is a no-op
 }
 ```
 
 **Key insight**: The `Get()` method returns a `ref`, which means you can modify the component data directly without creating copies.
+
+Use `Has(entity)` followed by `ref var component = ref store.Get(entity)` for optional
+access. There is no copy-returning `TryGet(out T)` API. Arrays grow geometrically;
+new sparse slots are initialized to `-1`, and only dense indices below `_count` are
+active. A large jump in entity ID requires allocating and initializing sparse
+storage proportional to that ID.
+
+Do not retain component references across additions that resize dense storage or
+removals that rearrange entries. World/system iteration should defer structural
+changes until component references are no longer in use. Stores key by entity ID;
+World must validate entity lifetimes and remove components before recycling IDs.
+
+The nongeneric `IComponentStore` exposes `Count`, `Has`, and `Remove` for heterogeneous
+store ownership. `IComponentStore<T>` inherits that contract and adds typed `Add`
+and `ref Get`. `ComponentStore<T>` implements the generic interface, and
+`ComponentStoreManager.Get<T>()` and `Create<T>()` return `IComponentStore<T>`.
+
+Storage regression tests run with:
+
+```sh
+dotnet run --project Tests/ComponentStore.Tests/ComponentStore.Tests.csproj
+```
 
 ## Components and Entities
 
@@ -219,7 +239,7 @@ Queries are **zero-allocation** — no lists are created, just iteration over th
 ### Good Component Example
 
 ```csharp
-public struct CollisionComponent : IComponent
+public struct CollisionComponent
 {
     public float Radius;
     public CollisionLayer Layer;
@@ -231,7 +251,7 @@ public struct CollisionComponent : IComponent
 
 ```csharp
 // ❌ Too much logic, mixed concerns
-public struct BadComponent : IComponent
+public struct BadComponent
 {
     public float Health;
     public float Mana;
@@ -282,7 +302,7 @@ entity.Destroy();
 The component system is being integrated into the full ECS architecture. Here's what's ready now:
 
 ✅ **Complete**:
-- Component struct definition with `IComponent` marker
+- Plain component struct definitions
 - Sparse-set storage with efficient access and iteration
 - Component queries across stored types
 - Built-in components (`TransformComponent`, `VelocityComponent`, etc.)
@@ -298,4 +318,3 @@ The component system is being integrated into the full ECS architecture. Here's 
 
 [Systems Core →](./SystemsCore.md) — How systems use components  
 [Architecture Overview →](./Overview.md) — How components fit into the engine
-

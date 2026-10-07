@@ -36,9 +36,9 @@ Systems contain the behavior of the ECS architecture and process components or o
 
 Short explanations of important MiniEngine concepts.
 
-### [`IComponent`](./ComponentSystem.md#what-are-components)
+### [Component structs](./ComponentSystem.md#what-are-components)
 
-Marker interface for component structs. All components must implement this interface.
+Components are plain data structs. Component stores accept any struct type.
 
 ### [`ComponentStore<T>`](./ComponentSystem.md#component-storage-architecture)
 

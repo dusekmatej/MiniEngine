@@ -1,9 +1,8 @@
 using System.Numerics;
-using MiniEngine.Components.Core;
 
 namespace MiniEngine.Components;
 
-public struct SpriteComponent : IComponent
+public struct SpriteComponent
 {
     public Vector2 Size;
     

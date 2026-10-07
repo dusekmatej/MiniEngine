@@ -1,7 +1,5 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
-public struct NameComponent : IComponent
+public struct NameComponent
 {
     public string Name;
 }

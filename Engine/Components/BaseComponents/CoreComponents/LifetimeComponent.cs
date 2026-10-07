@@ -1,8 +1,6 @@
-using MiniEngine.Components.Core;
-
 namespace MiniEngine.Components;
 
-public struct LifetimeComponent : IComponent
+public struct LifetimeComponent
 {
      public float TotalTime;
     public float RemainingTime;

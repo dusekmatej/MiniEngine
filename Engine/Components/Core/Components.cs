@@ -1,16 +1,22 @@
+using MiniEngine.Entities;
+
 namespace MiniEngine.Components.Core;
 
-internal class Components
+public class Components
 {
-    public ComponentStoreRegistry ComponentStoreRegistry;
+    private ComponentStoreRegistry _registry;
 
-    public Components(ComponentStoreRegistry componentStores)
+    internal Components(ComponentStoreRegistry componentStores)
     {
-        ComponentStoreRegistry = componentStores;
+        _registry = componentStores;
     }
 
-    public bool Add<T>() where T : struct
-    {
-        var store = ComponentStoreRegistry.GetOrCreate<T>();
-    }
+    public void Add<T>(Entity entity, T component) where T : struct
+        => _registry.GetOrCreate<T>().Add(entity, component); // We call the registry to get specific store then we add to the store
+
+    public bool Has<T>(Entity entity) where T : struct
+        => _registry.Get<T>()?.Has(entity) ?? false; // We call the registry to get specific store then we check if the store has the entity
+
+    public void Remove<T>(Entity entity) where T : struct
+        => _registry.Get<T>()?.Remove(entity); // We call the registry to get specific store then we remove from the store
 }

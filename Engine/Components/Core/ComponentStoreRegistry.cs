@@ -13,6 +13,7 @@ internal sealed class ComponentStoreRegistry
 
         var newStore = new ComponentStore<T>();
         _stores.Add(componentType, newStore);
+
         return newStore;
     }
 

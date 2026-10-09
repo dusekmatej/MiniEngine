@@ -82,7 +82,6 @@ public class Engine
             return;
 
         _graphics.BeginFrame();
-        _graphics.BeginFrame();
         _graphics.Clear();
 
         UpdateMouseState();

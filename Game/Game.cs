@@ -17,7 +17,6 @@ public class Game : IGame
 
     private TextureAssetHandle? _tileTexture;
     private TextureAssets? _textureAssets;
-    private bool _demoButtonWasPressed;
 
     private IsometricPreset _preset = IsometricPreset.Default;
     private TileMap _map = new TileMap(GridSize, GridSize);

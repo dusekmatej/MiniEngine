@@ -292,9 +292,9 @@ public class Renderer : IGraphicsBackend
 
         int vertexCount = command.Filled
             ? segmentCount + 2
-            : segmentCount + 1;
+            : segmentCount;
 
-        DrawColoredShape(vertices, vertexCount, primitiveType, model, command.Color);
+        DrawColoredShape(vertices, vertexCount, primitiveType, model, command.Color, command.Filled ? 0 : 1);
     }
 
     public void DrawLine(LineDrawCommand command)
@@ -326,7 +326,8 @@ public class Renderer : IGraphicsBackend
         int vertexCount,
         PrimitiveType primitiveType,
         Matrix4x4 model,
-        EngineColor color)
+        EngineColor color,
+        int firstVertex = 0)
     {
         _colorShader.Use();
 
@@ -349,7 +350,7 @@ public class Renderer : IGraphicsBackend
             );
         }
 
-        _gl.DrawArrays(primitiveType, 0, (uint)vertexCount);
+        _gl.DrawArrays(primitiveType, firstVertex, (uint)vertexCount);
     }
 
     public unsafe void DrawText(TextDrawCommand command)

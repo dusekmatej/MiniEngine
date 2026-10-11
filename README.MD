@@ -54,6 +54,8 @@ You should not need an enormous engine just to make a small 2D game.
 
 ## Current Development
 
+Image loading now uses files directly from `Game/Assets`, with lazy GPU upload and explicit texture eviction. See [Image assets](docs/AssetPipeline.md) for usage, lifecycle, and test commands.
+
 MiniEngine is still being built and many systems are evolving quickly.
 
 Some of the areas currently being developed include:

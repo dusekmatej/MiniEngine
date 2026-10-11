@@ -4,12 +4,12 @@
 
 MiniEngine is a C# game engine organized in `MiniEngine.sln`:
 
-- `Engine/`: ECS components, entities, systems, graphics interfaces, and world management.
-- `OpenGL/`: rendering backend, shaders, meshes, and textures.
-- `AssetPipeline/`: image loading; `Database/`: asset access and terrain resources.
-- `Game/`: sample game implementation; `Bootstrap/`: executable entry point.
-- `Game/Assets/`, `Database/Terrain/`, and `AllTextures/`: fonts and image assets.
-- `docs/`: architecture and subsystem documentation; start with `docs/Overview.md`.
+- `src/Engine/`: ECS components, entities, systems, graphics interfaces, and world management.
+- `src/OpenGL/`: rendering backend, shaders, meshes, and textures.
+- `src/AssetPipeline/`: image decoding and filesystem sources; `src/Database/`: generic structured-data storage.
+- `Game/`: sample game implementation; `Game/Bootstrap/`: executable entry point.
+- `Game/Assets/`: fonts and image assets, copied recursively to build and publish output.
+- `docs/`: architecture and subsystem documentation; see `docs/AssetPipeline.md` for image loading.
 
 Keep reusable engine behavior in `Engine/`, backend implementation in `OpenGL/`, and game-specific behavior in `Game/`.
 
@@ -19,7 +19,7 @@ Install the .NET 10 SDK. Run these commands from the repository root:
 
 - `make restore` — restore NuGet dependencies (`dotnet restore`).
 - `make build` — build the solution (`dotnet build`).
-- `make run` — launch the sample game through `Bootstrap/Bootstrap.csproj`.
+- `make run` — launch the sample game through `Game/Bootstrap/Bootstrap.csproj`.
 - `make clean` — remove build outputs (`dotnet clean`).
 - `make format` — apply C# formatting (`dotnet format`); review the diff before committing.
 
@@ -33,7 +33,7 @@ Nullable reference types and implicit usings are enabled. Manage dependency vers
 
 ## Testing Guidelines
 
-The repository currently has no automated test project, test framework, or coverage threshold. Validate changes with `make build` and exercise affected behavior through `make run`. For rendering changes, inspect the output visually. Record validation steps and any failures in the pull request. If adding tests, document the chosen framework and execution command.
+Run `dotnet test MiniEngine.sln` for the xUnit asset pipeline tests in `tests/AssetPipeline.Tests`. Validate changes with `make build` and exercise affected behavior through `make run`. For rendering changes, inspect the output visually. Record validation steps and any failures in the pull request. No coverage threshold is established.
 
 ## Commit & Pull Request Guidelines
 

@@ -29,11 +29,15 @@ Running the game requires a graphical environment with OpenGL support.
 
 Follow existing C# conventions: four-space indentation, braces on separate lines, and file-scoped namespaces. Use PascalCase for types, methods, and properties; camelCase for parameters and locals; and `_camelCase` for private fields. Prefix interfaces with `I`, such as `IGraphicsBackend`. Name files after their primary type and preserve established namespace organization.
 
+Prefer readable steps over compressed expressions. Use braces for control-flow bodies and descriptive local variables for nontrivial path, validation, and resource-lifecycle logic. Keep expression-bodied members for obvious getters and simple forwarding; avoid dense one-liners, nested ternaries, and null-forgiving operators that hide assumptions. Use a straightforward loop when it is clearer than LINQ, and keep refactors focused on the affected code.
+
 Nullable reference types and implicit usings are enabled. Manage dependency versions centrally in `Directory.Packages.props`.
 
 ## Testing Guidelines
 
 Run `dotnet test MiniEngine.sln` for the xUnit asset pipeline tests in `tests/AssetPipeline.Tests`. Validate changes with `make build` and exercise affected behavior through `make run`. For rendering changes, inspect the output visually. Record validation steps and any failures in the pull request. No coverage threshold is established.
+
+Remove temporary verification files and stop any processes you start after validation. Preserve committed automated tests.
 
 ## Commit & Pull Request Guidelines
 

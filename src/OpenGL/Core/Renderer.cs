@@ -102,6 +102,8 @@ public class Renderer : IGraphicsBackend, IDisposable
 
     public Renderer(GL gl, int viewportWidth, int viewportHeight, Func<bool> isContextCurrent)
     {
+        ArgumentNullException.ThrowIfNull(gl);
+        ArgumentNullException.ThrowIfNull(isContextCurrent);
         _gl = gl;
         _isContextCurrent = isContextCurrent;
         _viewportWidth = viewportWidth;
@@ -166,7 +168,9 @@ public class Renderer : IGraphicsBackend, IDisposable
     {
         EnsureContext();
         if (_nextTextureHandle == int.MaxValue)
+        {
             throw new InvalidOperationException("Backend texture handle capacity exhausted.");
+        }
         var texture = new Texture(_gl, image, _isContextCurrent);
 
         var handle = new BackendTextureHandle(_nextTextureHandle++);
@@ -180,7 +184,9 @@ public class Renderer : IGraphicsBackend, IDisposable
     {
         EnsureContext();
         if (!_textures.Remove(handle.Value, out var texture))
+        {
             throw new InvalidOperationException($"Texture handle {handle.Value} does not exist.");
+        }
 
         texture.Dispose();
     }
@@ -189,7 +195,9 @@ public class Renderer : IGraphicsBackend, IDisposable
     {
         EnsureContext();
         if (!_textures.TryGetValue(command.Texture.Value, out var texture))
+        {
             throw new InvalidOperationException($"Texture handle {command.Texture.Value} does not exist.");
+        }
 
         _textureShader.Use();
 
@@ -320,7 +328,9 @@ public class Renderer : IGraphicsBackend, IDisposable
         float length = MathF.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
         if (length <= 0f)
+        {
             return;
+        }
 
         float[] vertices =
         {
@@ -373,7 +383,9 @@ public class Renderer : IGraphicsBackend, IDisposable
     {
         EnsureContext();
         if (!_textures.TryGetValue(command.Texture.Value, out var texture))
+        {
             throw new InvalidOperationException($"Texture handle {command.Texture.Value} does not exist.");
+        }
 
         _textShader.Use();
 
@@ -402,10 +414,17 @@ public class Renderer : IGraphicsBackend, IDisposable
     public void Dispose()
     {
         if (_disposed)
+        {
             return;
+        }
+
         EnsureContext();
+
         foreach (Texture texture in _textures.Values)
+        {
             texture.Dispose();
+        }
+
         _textures.Clear();
         _gl.DeleteVertexArray(_quad.VertexArray);
         _gl.DeleteBuffer(_quad._vertexBuffer);
@@ -421,7 +440,14 @@ public class Renderer : IGraphicsBackend, IDisposable
     private void EnsureContext()
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
-        if (System.Environment.CurrentManagedThreadId != _ownerThread || !_isContextCurrent())
-            throw new InvalidOperationException("Rendering requires the owning thread and a current OpenGL context.");
+        if (System.Environment.CurrentManagedThreadId != _ownerThread)
+        {
+            throw new InvalidOperationException("Rendering must run on the owning graphics thread.");
+        }
+
+        if (!_isContextCurrent())
+        {
+            throw new InvalidOperationException("Rendering requires a current OpenGL context.");
+        }
     }
 }

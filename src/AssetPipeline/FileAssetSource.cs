@@ -5,86 +5,170 @@ namespace MiniEngine.AssetPipeline;
 
 public sealed class FileAssetSource : IAssetSource
 {
-    private static readonly string[] Extensions = [".png", ".jpg", ".jpeg", ".bmp", ".gif"];
-    private readonly string _root;
+    private static readonly string[] SupportedExtensions = [".png", ".jpg", ".jpeg", ".bmp", ".gif"];
+    private static readonly char[] PathSeparators = [Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar];
+    private readonly string _assetRoot;
 
     public FileAssetSource(string root)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(root);
-        _root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(root));
-        if (!Directory.Exists(_root))
-            throw new DirectoryNotFoundException($"Asset root '{_root}' does not exist.");
-        RejectLinks(_root);
+        _assetRoot = Path.TrimEndingDirectorySeparator(Path.GetFullPath(root));
+
+        if (!Directory.Exists(_assetRoot))
+        {
+            throw new DirectoryNotFoundException($"Asset root '{_assetRoot}' does not exist.");
+        }
+
+        RejectDirectoryLinks(_assetRoot);
     }
 
     public string NormalizeName(string name)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        string relative = name.Replace('\\', '/');
-        if (Path.IsPathRooted(relative) || relative.Contains(':') || relative.Contains('\0'))
-            throw new ArgumentException("Asset identifiers must be relative paths.", nameof(name));
+        string relativePath = NormalizeRelativePath(name);
+        string extension = Path.GetExtension(relativePath);
 
-        string[] segments = relative.Split('/', StringSplitOptions.RemoveEmptyEntries);
-        if (segments.Contains(".."))
-            throw new ArgumentException("Asset identifiers cannot traverse parent directories.", nameof(name));
-        relative = string.Join('/', segments.Where(segment => segment != "."));
-        if (relative.Length == 0)
-            throw new ArgumentException("Asset identifier must name an image.", nameof(name));
-
-        string extension = Path.GetExtension(relative);
-        if (extension.Length > 0)
+        bool hasExtension = extension.Length > 0;
+        if (hasExtension && !SupportedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
         {
-            if (!Extensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
-                throw new NotSupportedException($"Asset '{name}' has unsupported image extension '{extension}'.");
-            return ResolveExisting(relative, name);
+            throw new NotSupportedException($"Asset '{name}' has unsupported image extension '{extension}'.");
         }
 
-        foreach (string candidateExtension in Extensions)
+        string relativeDirectory = Path.GetDirectoryName(relativePath) ?? string.Empty;
+        string fullDirectoryPath = Path.Combine(_assetRoot, relativeDirectory);
+        RejectDirectoryLinks(fullDirectoryPath);
+
+        if (hasExtension)
         {
-            string candidate = relative + candidateExtension;
-            string path = Path.Combine(_root, candidate);
-            RejectLinks(path);
-            if (File.Exists(path))
-                return CanonicalName(candidate);
+            if (!ImageFileExists(relativePath))
+            {
+                throw new FileNotFoundException(
+                    $"Image asset '{name}' was not found under '{_assetRoot}'.",
+                    Path.Combine(_assetRoot, relativePath));
+            }
+
+            return NormalizePathCase(relativePath);
         }
 
-        throw new FileNotFoundException($"Image asset '{name}' was not found under '{_root}'. Tried {string.Join(", ", Extensions)}.", name);
+        foreach (string candidateExtension in SupportedExtensions)
+        {
+            string candidatePath = relativePath + candidateExtension;
+
+            if (ImageFileExists(candidatePath))
+            {
+                return NormalizePathCase(candidatePath);
+            }
+        }
+
+        string attemptedExtensions = string.Join(", ", SupportedExtensions);
+        throw new FileNotFoundException(
+            $"Image asset '{name}' was not found under '{_assetRoot}'. Tried {attemptedExtensions}.",
+            name);
     }
 
     public ImageData LoadImage(string name)
     {
-        string path = Path.Combine(_root, NormalizeName(name));
+        string relativePath = NormalizeName(name);
+        string fullPath = Path.Combine(_assetRoot, relativePath);
+
         try
         {
-            return ImageLoader.Load(path);
+            return ImageLoader.Load(fullPath);
         }
-        catch (Exception exception) when (exception is not IOException && exception is not UnauthorizedAccessException)
+        catch (Exception exception) when (
+            exception is not IOException &&
+            exception is not UnauthorizedAccessException &&
+            exception is not OutOfMemoryException)
         {
-            throw new InvalidDataException($"Image asset '{name}' at '{path}' could not be decoded as RGBA.", exception);
+            throw new InvalidDataException(
+                $"Image asset '{name}' at '{fullPath}' could not be decoded as RGBA.",
+                exception);
         }
     }
 
-    private string ResolveExisting(string relative, string name)
+    private static string NormalizeRelativePath(string name)
     {
-        string path = Path.Combine(_root, relative);
-        RejectLinks(path);
-        if (!File.Exists(path))
-            throw new FileNotFoundException($"Image asset '{name}' was not found under '{_root}'.", path);
-        return CanonicalName(relative);
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        string normalizedPath = name.Replace('\\', '/');
+
+        if (Path.IsPathRooted(normalizedPath) || normalizedPath.Contains(':') || normalizedPath.Contains('\0'))
+        {
+            throw new ArgumentException("Asset identifiers must be relative paths.", nameof(name));
+        }
+
+        string[] pathSegments = normalizedPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var normalizedSegments = new List<string>(pathSegments.Length);
+
+        foreach (string segment in pathSegments)
+        {
+            if (segment == "..")
+            {
+                throw new ArgumentException("Asset identifiers cannot traverse parent directories.", nameof(name));
+            }
+
+            if (segment == ".")
+            {
+                continue;
+            }
+
+            normalizedSegments.Add(segment);
+        }
+
+        if (normalizedSegments.Count == 0)
+        {
+            throw new ArgumentException("Asset identifier must name an image.", nameof(name));
+        }
+
+        return string.Join('/', normalizedSegments);
     }
 
-    private static string CanonicalName(string relative)
-        => OperatingSystem.IsWindows() ? relative.ToUpperInvariant() : relative;
-
-    private static void RejectLinks(string path)
+    private bool ImageFileExists(string relativePath)
     {
-        string current = Path.GetPathRoot(path)!;
-        foreach (string segment in path[current.Length..].Split([Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar], StringSplitOptions.RemoveEmptyEntries))
+        string fullPath = Path.Combine(_assetRoot, relativePath);
+        var imageFile = new FileInfo(fullPath);
+        RejectLink(imageFile);
+
+        return imageFile.Exists;
+    }
+
+    private static string NormalizePathCase(string relativePath)
+    {
+        if (OperatingSystem.IsWindows())
         {
-            current = Path.Combine(current, segment);
-            FileSystemInfo info = Directory.Exists(current) ? new DirectoryInfo(current) : new FileInfo(current);
-            if (info.LinkTarget is not null || (info.Exists && (info.Attributes & FileAttributes.ReparsePoint) != 0))
-                throw new UnauthorizedAccessException($"Asset paths cannot contain symbolic links or reparse points: '{current}'.");
+            return relativePath.ToUpperInvariant();
+        }
+
+        return relativePath;
+    }
+
+    private static void RejectDirectoryLinks(string directoryPath)
+    {
+        string? rootPath = Path.GetPathRoot(directoryPath);
+        if (string.IsNullOrEmpty(rootPath))
+        {
+            throw new ArgumentException("Asset directory paths must be absolute.", nameof(directoryPath));
+        }
+
+        string pathWithoutRoot = directoryPath[rootPath.Length..];
+        string[] pathSegments = pathWithoutRoot.Split(PathSeparators, StringSplitOptions.RemoveEmptyEntries);
+        string currentPath = rootPath;
+
+        foreach (string segment in pathSegments)
+        {
+            currentPath = Path.Combine(currentPath, segment);
+            var directory = new DirectoryInfo(currentPath);
+            RejectLink(directory);
+        }
+    }
+
+    private static void RejectLink(FileSystemInfo entry)
+    {
+        bool isSymbolicLink = entry.LinkTarget is not null;
+        bool isReparsePoint = entry.Exists && (entry.Attributes & FileAttributes.ReparsePoint) != 0;
+
+        if (isSymbolicLink || isReparsePoint)
+        {
+            throw new UnauthorizedAccessException(
+                $"Asset paths cannot contain symbolic links or reparse points: '{entry.FullName}'.");
         }
     }
 }

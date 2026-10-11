@@ -15,15 +15,17 @@ public class Texture : IDisposable
     public int Width { get; }
     public int Height { get; }
 
-    public Texture(GL gl, ImageData img, Func<bool> isContextCurrent)
+    public Texture(GL gl, ImageData image, Func<bool> isContextCurrent)
     {
-        ArgumentNullException.ThrowIfNull(img);
+        ArgumentNullException.ThrowIfNull(gl);
+        ArgumentNullException.ThrowIfNull(image);
+        ArgumentNullException.ThrowIfNull(isContextCurrent);
         _gl = gl;
         _isContextCurrent = isContextCurrent;
-        EnsureThread();
+        EnsureContext();
 
-        Width = img.Width;
-        Height = img.Height;
+        Width = image.Width;
+        Height = image.Height;
 
         Handle = _gl.GenTexture();
 
@@ -31,7 +33,7 @@ public class Texture : IDisposable
 
         unsafe
         {
-            fixed (byte* pixels = img.Pixels)
+            fixed (byte* pixels = image.Pixels)
             {
                 _gl.TexImage2D(
                     TextureTarget.Texture2D,
@@ -56,7 +58,6 @@ public class Texture : IDisposable
                     TextureParameterName.TextureMagFilter,
                     (int)GLEnum.Nearest
                 );
-
             }
         }
     }
@@ -64,23 +65,32 @@ public class Texture : IDisposable
     public void Bind()
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
-        EnsureThread();
+        EnsureContext();
         _gl.BindTexture(TextureTarget.Texture2D, Handle);
     }
 
     public void Dispose()
     {
         if (_disposed)
+        {
             return;
-        EnsureThread();
+        }
+
+        EnsureContext();
         _gl.DeleteTexture(Handle);
         _disposed = true;
     }
 
-    private void EnsureThread()
+    private void EnsureContext()
     {
-        if (System.Environment.CurrentManagedThreadId != _ownerThread || !_isContextCurrent())
-            throw new InvalidOperationException("OpenGL textures require their owning thread and a current graphics context.");
-    }
+        if (System.Environment.CurrentManagedThreadId != _ownerThread)
+        {
+            throw new InvalidOperationException("OpenGL textures must be used on their owning graphics thread.");
+        }
 
+        if (!_isContextCurrent())
+        {
+            throw new InvalidOperationException("OpenGL textures require a current graphics context.");
+        }
+    }
 }

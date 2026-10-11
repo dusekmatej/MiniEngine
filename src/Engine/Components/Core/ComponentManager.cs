@@ -1,12 +1,12 @@
 using MiniEngine.Entities;
 
-namespace MiniEngine.Components.Core;
+namespace MiniEngine.Components;
 
-public class Components
+public class ComponentManager
 {
     private ComponentStoreRegistry _registry;
 
-    internal Components(ComponentStoreRegistry componentStores)
+    internal ComponentManager(ComponentStoreRegistry componentStores)
     {
         _registry = componentStores;
     }

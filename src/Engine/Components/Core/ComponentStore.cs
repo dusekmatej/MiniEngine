@@ -1,6 +1,6 @@
 using MiniEngine.Entities;
 
-namespace MiniEngine.Components.Core;
+namespace MiniEngine.Components;
 
 internal sealed class ComponentStore<T> where T : struct
 {
@@ -70,8 +70,8 @@ internal sealed class ComponentStore<T> where T : struct
         if (!Has(entity))
             return false;
 
-        int removedIndex = _sparse[entity.Id];
-        int lastIndex = _count - 1;
+        var removedIndex = _sparse[entity.Id];
+        var lastIndex = _count - 1;
 
         if (removedIndex != lastIndex)
         {
@@ -106,8 +106,8 @@ internal sealed class ComponentStore<T> where T : struct
         if (entityId < _sparse.Length)
             return;
 
-        int oldLength = _sparse.Length;
-        int newLength = Math.Max(entityId + 1, oldLength * 2);
+        var oldLength = _sparse.Length;
+        var newLength = Math.Max(entityId + 1, oldLength * 2);
 
         Array.Resize(ref _sparse, newLength);
         Array.Fill(_sparse, -1, oldLength, newLength - oldLength);

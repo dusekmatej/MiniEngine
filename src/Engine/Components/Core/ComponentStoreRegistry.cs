@@ -1,4 +1,4 @@
-namespace MiniEngine.Components.Core;
+namespace MiniEngine.Components;
 
 internal sealed class ComponentStoreRegistry
 {

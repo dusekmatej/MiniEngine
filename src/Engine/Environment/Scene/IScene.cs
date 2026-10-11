@@ -2,5 +2,8 @@ namespace MiniEngine.Environment;
 
 public interface IScene
 {
-    public IWorld World { get; }
+    IReadOnlyList<IWorld> Worlds { get; }
+
+    void AddWorld(IWorld world);
+    bool RemoveWorld(IWorld world);
 }

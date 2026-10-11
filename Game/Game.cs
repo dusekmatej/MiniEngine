@@ -40,17 +40,7 @@ public class Game : IGame
 
         _tileTexture = textureAssets.Load("tile_022");
 
-        string fontPath = Path.Combine(
-            AppContext.BaseDirectory,
-            "Assets",
-            "Fonts",
-            "JetBrainsMono-Bold.ttf"
-        );
-
-        _debugFont = _fontManager.AddFont(
-            "debug",
-            fontPath
-        );
+        InitializeFont();
     }
 
     public void Update(float deltaTime)
@@ -73,5 +63,20 @@ public class Game : IGame
         );
 
         Drawing.DrawPlatform(_drawPlatformDto);
+    }
+
+    private void InitializeFont()
+    {
+        string fontPath = Path.Combine(
+            AppContext.BaseDirectory,
+            "Assets",
+            "Fonts",
+            "JetBrainsMono-Bold.ttf"
+        );
+
+        _debugFont = _fontManager.AddFont(
+            "debug",
+            fontPath
+        );
     }
 }

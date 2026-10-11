@@ -2,11 +2,52 @@ using System.Numerics;
 using MiniEngine.Graphics;
 using MiniEngine.Graphics.Fonts;
 
-namespace MiniEngine.Game;
+namespace MiniEngine.Game.Rendering;
 
 public static class Drawing
 {
     private static bool _demoButtonWasPressed;
+
+    public static void DrawPlatform(DrawPlatformDto x)
+    {
+        if (x.Drawing is null || x.TileTexture is null)
+            return;
+
+        const float originX = -0.15f;
+        const float originY = 0.35f;
+
+        for (int depth = 0; depth <= (x.GridSize - 1) * 2; depth++)
+        {
+            int minimumX = Math.Max(0, depth - (x.GridSize - 1));
+            int maximumX = Math.Min(x.GridSize - 1, depth);
+
+            for (int gridX = minimumX; gridX <= maximumX; gridX++)
+            {
+                int gridY = depth - gridX;
+
+                int tileId = x.Map[gridX, gridY];
+
+                if (tileId != 0)
+                    continue;
+
+                float screenX = 
+                    originX + (gridX - gridY) * x.Preset.FootprintWidth / 2f;
+                float screenY = 
+                    originY - (gridX + gridY) * x.Preset.FootprintHeight / 2f;
+
+                x.Drawing.DrawSprite(
+                    x.TileTexture.Value,
+                    screenX, 
+                    screenY, 
+                    x.Preset.SpriteWidth, 
+                    x.Preset.SpriteHeight,
+                    EngineColor.White,
+                    layer: 0
+                );
+            }
+        }
+    }
+
 
     public static void DrawPremadeItems(Graphics2D _drawing, FontAssetHandle? _debugFont, TextureAssetHandle? _tileTexture)
     {   

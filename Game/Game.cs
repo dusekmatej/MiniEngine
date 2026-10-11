@@ -37,7 +37,7 @@ public class Game : IGame
 
         Console.WriteLine("Game: Initializing game...");
 
-        _tileTexture = textureAssets.Load("tile_022");
+        _tileTexture = textureAssets.Load("Terrain/Grass/tile_022");
 
         string fontPath = Path.Combine(
             AppContext.BaseDirectory,

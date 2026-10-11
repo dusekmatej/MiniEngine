@@ -1,163 +1,227 @@
-# MiniEngine Source-Available License
+MiniEngine Source-Available License
 Version 1.0 — October 11, 2026
 
 Copyright (c) 2026 Matěj Dušek
 
 All rights reserved except as expressly granted under this License.
 
-## 1. Definitions
+1. DEFINITIONS
 
-**"Engine"** means the MiniEngine game engine, including its source code, compiled binaries, libraries, runtime components, and modifications or derivative versions of those components made available under this License.
+"Engine" means the MiniEngine game engine, including its source code,
+compiled binaries, libraries, runtime components, and modifications or
+derivative versions of those components made available under this License.
 
-**"Licensor"** means Matěj Dušek and any other copyright holders who expressly license their contributions under this License.
+"Licensor" means Matěj Dušek and any other copyright holders who expressly
+license their contributions under this License.
 
-**"You"** means any individual or legal entity exercising rights granted under this License.
+"You" means any individual or legal entity exercising rights granted under
+this License.
 
-**"Game"** means a video game or interactive entertainment application developed using the Engine, where the Engine serves as an underlying development or runtime technology rather than the principal product being offered.
+"Game" means a video game or interactive entertainment application developed
+using the Engine, where the Engine serves as an underlying development or
+runtime technology rather than the principal product being offered.
 
-**"Engine Distribution"** means distributing the Engine, in original or modified form, as a standalone engine, reusable game-development framework, SDK, engine library package, or substantially equivalent product.
+"Engine Distribution" means distributing the Engine, in original or modified
+form, as a standalone engine, reusable game-development framework, SDK,
+engine library package, or substantially equivalent product.
 
-**"Runtime Components"** means portions of the Engine reasonably necessary to execute a Game, including compiled libraries and supporting files.
+"Runtime Components" means portions of the Engine reasonably necessary to
+execute a Game, including compiled libraries and supporting files.
 
-## 2. Permission to Use
+2. PERMISSION TO USE
 
-Subject to this License, the Licensor grants You a worldwide, royalty-free, non-exclusive copyright license to:
+Subject to this License, the Licensor grants You a worldwide, royalty-free,
+non-exclusive copyright license to:
 
-a. Download, install, and use the Engine for personal, educational, research, and commercial purposes.
+(a) Download, install, and use the Engine for personal, educational, research,
+    and commercial purposes.
 
-b. Study, modify, and create derivative versions of the Engine.
+(b) Study, modify, and create derivative versions of the Engine.
 
-c. Develop, publish, distribute, and commercially sell Games created using the Engine, provided that such Games include visible attribution to MiniEngine in accordance with Section 3.
+(c) Develop, publish, distribute, and commercially sell Games created using
+    the Engine, provided that such Games include visible attribution to
+    MiniEngine in accordance with Section 3.
 
-d. Distribute Runtime Components as part of Games, including commercially distributed Games.
+(d) Distribute Runtime Components as part of Games, including commercially
+    distributed Games.
 
-e. Distribute original or modified versions of the Engine without charge, subject to Section 4.
+(e) Distribute original or modified versions of the Engine without charge,
+    subject to Section 4.
 
-f. Provide paid consulting, development, training, maintenance, and technical support services relating to the Engine, provided these services do not constitute prohibited commercial Engine Distribution.
+(f) Provide paid consulting, development, training, maintenance, and technical
+    support services relating to the Engine, provided these services do not
+    constitute prohibited commercial Engine Distribution.
 
 No royalties are owed to the Licensor for Games created using the Engine.
 
-## 3. Commercial Games
+3. COMMERCIAL GAMES AND ATTRIBUTION
 
-You may develop and distribute commercial Games using the Engine, including Games sold for a one-time price, by subscription, or through in-game purchases.
+You may develop and distribute commercial Games using the Engine, including
+Games sold for a one-time price, by subscription, or through in-game purchases.
 
-Games may contain compiled Engine Runtime Components required for their operation.
+Games may contain compiled Engine Runtime Components required for their
+operation.
 
-A Game does not become a prohibited Engine Distribution merely because it contains Engine Runtime Components, even when the Game is sold commercially.
+A Game does not become a prohibited Engine Distribution merely because it
+contains Engine Runtime Components, even when the Game is sold commercially.
 
-You retain ownership of Your independently created game code, artwork, audio, and other original content. This License does not require You to publish the source code of Your Game.
+You retain ownership of Your independently created game code, artwork, audio,
+and other original content. This License does not require You to publish the
+source code of Your Game.
 
-However, packaging the Engine as a nominal Game, demonstration, launcher, or other product primarily intended to distribute a reusable engine does not avoid the restrictions of Section 4.
-### Attribution Requirements
+However, packaging the Engine as a nominal Game, demonstration, launcher, or
+other product primarily intended to distribute a reusable engine does not
+avoid the restrictions of Section 4.
 
-Any Game developed using MiniEngine and publicly distributed, whether free or commercial, must include the following attribution:
+3.1. ATTRIBUTION REQUIREMENTS
 
-**"Made with MiniEngine"**
+Any Game developed using MiniEngine and publicly distributed, whether free or
+commercial, must include the following attribution:
+
+    Made with MiniEngine
 
 The attribution must:
 
-a. Be displayed in a reasonably accessible location, such as the game's credits, main menu, or an "About" section.
+(a) Be displayed in a reasonably accessible location, such as the Game's
+    credits, main menu, or an "About" section.
 
-b. Be clearly visible and readable to users.
+(b) Be clearly visible and readable to users.
 
-c. Not be deliberately obscured, removed, or misrepresented.
+(c) Not be deliberately obscured, removed, or misrepresented.
 
-d. Remain present in distributed versions of the Game.
+(d) Remain present in distributed versions of the Game.
 
-The attribution does not need to appear during startup, on loading screens, or during gameplay.
+The attribution does not need to appear during startup, on loading screens, or
+during gameplay.
 
-Developers may additionally display the official MiniEngine logo, provided they do not imply endorsement or official affiliation.
+Developers may additionally display the official MiniEngine logo, provided
+they do not imply endorsement or official affiliation.
 
-This requirement also applies to Games developed using modified versions of MiniEngine.
+This requirement also applies to Games developed using modified versions of
+MiniEngine.
 
-## 4. Restrictions on Commercial Engine Distribution
+4. RESTRICTIONS ON COMMERCIAL ENGINE DISTRIBUTION
 
-Without separate written permission from the relevant copyright holders, You may not:
+Without separate written permission from the relevant copyright holders,
+You may not:
 
-a. Sell, rent, or license access to the Engine as a standalone product.
+(a) Sell, rent, or license access to the Engine as a standalone product.
 
-b. Charge a fee for copies of an Engine Distribution, including modified versions or forks.
+(b) Charge a fee for copies of an Engine Distribution, including modified
+    versions or forks.
 
-c. Offer an Engine Distribution as a paid download, subscription, or paid-access package.
+(c) Offer an Engine Distribution as a paid download, subscription, or
+    paid-access package.
 
-d. Bundle an Engine Distribution with another product primarily as a means of charging for access to the Engine.
+(d) Bundle an Engine Distribution with another product primarily as a means
+    of charging for access to the Engine.
 
-These restrictions do not prohibit selling Games as permitted by Section 3, or providing genuine development, support, or consulting services as permitted by Section 2.
+These restrictions do not prohibit selling Games as permitted by Section 3,
+or providing genuine development, support, or consulting services as permitted
+by Section 2.
 
-You may distribute original or modified Engine Distributions free of charge, including through public source-code repositories.
+You may distribute original or modified Engine Distributions free of charge,
+including through public source-code repositories.
 
-A paid Game containing required Runtime Components is not considered a prohibited Engine Distribution solely because those Runtime Components are included.
+A paid Game containing required Runtime Components is not considered a
+prohibited Engine Distribution solely because those Runtime Components are
+included.
 
-## 5. Redistribution Conditions
+5. REDISTRIBUTION CONDITIONS
 
 When You distribute the Engine or a modified Engine Distribution, You must:
 
-a. Include a copy of this License.
+(a) Include a copy of this License.
 
-b. Preserve existing copyright and attribution notices.
+(b) Preserve existing copyright and attribution notices.
 
-c. Clearly identify significant modifications You have made.
+(c) Clearly identify significant modifications You have made.
 
-d. Distribute the Engine or modified Engine Distribution without charge.
+(d) Distribute the Engine or modified Engine Distribution without charge.
 
-e. Not claim that Your modified version is the official MiniEngine release unless authorized by the project owner.
+(e) Not claim that Your modified version is the official MiniEngine release
+    unless authorized by the project owner.
 
-You are not required to publish Your private Engine modifications. However, if You choose to distribute a modified Engine Distribution, the distribution must comply with this License.
+You are not required to publish Your private Engine modifications. However,
+if You choose to distribute a modified Engine Distribution, the distribution
+must comply with this License.
 
-## 6. Intellectual Property and Branding
+6. INTELLECTUAL PROPERTY AND BRANDING
 
-The Licensor and other applicable copyright holders retain ownership of their respective contributions.
+The Licensor and other applicable copyright holders retain ownership of their
+respective contributions.
 
 This License grants only the rights expressly described herein.
 
-It does not grant permission to use MiniEngine trademarks, logos, or branding to imply official endorsement or affiliation.
+It does not grant permission to use MiniEngine trademarks, logos, or branding
+to imply official endorsement or affiliation.
 
-You may accurately identify MiniEngine as the technology used by Your Game or modified Engine Distribution.
+You may accurately identify MiniEngine as the technology used by Your Game or
+modified Engine Distribution.
 
-## 7. Contributions
+7. CONTRIBUTIONS
 
-Contributors retain copyright in their original contributions unless they separately agree otherwise.
+Contributors retain copyright in their original contributions unless they
+separately agree otherwise.
 
-By intentionally submitting a contribution for inclusion in the official MiniEngine project, You agree to make that contribution available under the terms of this License, provided You have the legal right to do so.
+By intentionally submitting a contribution for inclusion in the official
+MiniEngine project, You agree to make that contribution available under the
+terms of this License, provided You have the legal right to do so.
 
-Submitting a contribution does not transfer copyright ownership to the project owner and does not automatically grant the project owner exclusive relicensing rights.
+Submitting a contribution does not transfer copyright ownership to the
+project owner and does not automatically grant the project owner exclusive
+relicensing rights.
 
-Third-party code remains subject to its applicable license terms. Nothing in this License overrides the rights or obligations associated with third-party software.
+Third-party code remains subject to its applicable license terms. Nothing
+in this License overrides the rights or obligations associated with
+third-party software.
 
-## 8. No Warranty
+8. NO WARRANTY
 
-THE ENGINE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
+THE ENGINE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND NON-INFRINGEMENT, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
-## 9. Limitation of Liability
+9. LIMITATION OF LIABILITY
 
-TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSOR AND CONTRIBUTORS SHALL NOT BE LIABLE FOR ANY DAMAGES ARISING FROM THE USE, DISTRIBUTION, OR INABILITY TO USE THE ENGINE.
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSOR AND CONTRIBUTORS SHALL
+NOT BE LIABLE FOR ANY DAMAGES ARISING FROM THE USE, DISTRIBUTION, OR INABILITY
+TO USE THE ENGINE.
 
 Nothing in this License excludes liability that cannot lawfully be excluded.
 
-## 10. Termination
+10. TERMINATION
 
-If You violate the conditions of this License, Your rights under this License terminate automatically.
+If You violate the conditions of this License, Your rights under this License
+terminate automatically.
 
-If You cease the violation and remedy it within 30 days after becoming aware of it, Your rights are reinstated unless the relevant copyright holder has already notified You of permanent termination.
+If You cease the violation and remedy it within 30 days after becoming aware
+of it, Your rights are reinstated unless the relevant copyright holder has
+already notified You of permanent termination.
 
-Termination does not affect rights independently granted to other recipients who remain in compliance with this License.
+Termination does not affect rights independently granted to other recipients
+who remain in compliance with this License.
 
-## 11. Separate Commercial Permissions
+11. SEPARATE COMMERCIAL PERMISSIONS
 
-The relevant copyright holders may grant additional permissions under separate written agreements.
+The relevant copyright holders may grant additional permissions under
+separate written agreements.
 
-Such permissions may allow activities otherwise restricted by this License, including commercial Engine Distribution.
+Such permissions may allow activities otherwise restricted by this License,
+including commercial Engine Distribution.
 
-This License does not obligate the Licensor to offer or approve such permissions.
+This License does not obligate the Licensor to offer or approve such
+permissions.
 
-## 12. Acceptance
+12. ACCEPTANCE
 
 You are not required to accept this License merely to read the source code.
 
-However, copying, modifying, or distributing the Engine beyond what applicable law independently permits requires permission from the relevant copyright holders.
+However, copying, modifying, or distributing the Engine beyond what
+applicable law independently permits requires permission from the relevant
+copyright holders.
 
-By exercising rights granted under this License, You agree to comply with its terms.
+By exercising rights granted under this License, You agree to comply with its
+terms.
 
----
-
-**End of MiniEngine Source-Available License, Version 1.0**
+END OF TERMS AND CONDITIONS

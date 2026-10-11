@@ -8,10 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Engine\Engine.csproj" />
-      <ProjectReference Include="..\Game\Game.csproj" />
-      <ProjectReference Include="..\OpenGL\OpenGL.csproj" />
-      <ProjectReference Include="..\Database\Database.csproj" />
+      <ProjectReference Include="..\..\src\Engine\Engine.csproj" />
+      <ProjectReference Include="..\Game.csproj" />
+      <ProjectReference Include="..\..\src\OpenGL\OpenGL.csproj" />
+      <ProjectReference Include="..\..\src\Database\Database.csproj" />
     </ItemGroup>
 
     <ItemGroup>

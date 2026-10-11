@@ -1,16 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bootstrap", "Bootstrap\Bootstrap.csproj", "{F3BA33B9-FB5C-407F-B317-D2276DBFA8A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bootstrap", "Game\Bootstrap\Bootstrap.csproj", "{F3BA33B9-FB5C-407F-B317-D2276DBFA8A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{2B905B04-7D1F-43C6-832A-98D85B8736A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "src\Engine\Engine.csproj", "{2B905B04-7D1F-43C6-832A-98D85B8736A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{5CDE0A74-FB08-4D49-80F3-0349D164E758}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{37B376D9-30F4-4D3A-B79D-F52E2B5367D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "src\Database\Database.csproj", "{37B376D9-30F4-4D3A-B79D-F52E2B5367D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetPipeline", "AssetPipeline\AssetPipeline.csproj", "{59C206B2-17B7-4988-B52F-AEAFB59E5451}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetPipeline", "src\AssetPipeline\AssetPipeline.csproj", "{59C206B2-17B7-4988-B52F-AEAFB59E5451}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGL", "OpenGL\OpenGL.csproj", "{18A96841-5CCC-4F3E-BE04-AB0FCF2BDAFB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGL", "src\OpenGL\OpenGL.csproj", "{18A96841-5CCC-4F3E-BE04-AB0FCF2BDAFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

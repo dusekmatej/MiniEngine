@@ -1,7 +1,7 @@
 .PHONY: run build restore clean format
 
 run:
-	dotnet run --project Bootstrap/Bootstrap.csproj
+	dotnet run --project Game/Bootstrap/Bootstrap.csproj
 
 build:
 	dotnet build

@@ -42,6 +42,7 @@ public class Game : IGame
         string fontPath = Path.Combine(
             AppContext.BaseDirectory,
             "Assets",
+            "Fonts",
             "JetBrainsMono-Bold.ttf"
         );
 

@@ -3,18 +3,23 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <DefaultItemExcludes>$(DefaultItemExcludes);Bootstrap/**</DefaultItemExcludes>
     </PropertyGroup>
 
     <ItemGroup>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Engine\Engine.csproj" />
+      <ProjectReference Include="..\src\Engine\Engine.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update=".\Assets/JetBrainsMono-Bold.ttf">
+      <Compile Remove="Assets/**/*" />
+      <EmbeddedResource Remove="Assets/**/*" />
+      <None Remove="Assets/**/*" />
+      <Content Include="Assets/**/*">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
 </Project>

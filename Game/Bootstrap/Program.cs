@@ -1,6 +1,5 @@
 ﻿using MiniEngine;
-using MiniEngine.Database;
-using MiniEngine.Database.Import;
+using MiniEngine.AssetPipeline;
 using MiniEngine.OpenGL.Core;
 using System.Reflection;
 
@@ -28,10 +27,8 @@ public class Program
     {
         DisplayVersion();
 
-        TerrainImport.PopulateDatabase();
-
         var graphicsFactory = new BackendFactory();
-        var assetSource = new DatabaseAssetSource();
+        var assetSource = new FileAssetSource(Path.Combine(AppContext.BaseDirectory, "Assets"));
         Engine engine = new Engine(game, graphicsFactory, assetSource);
 
         engine.Run();

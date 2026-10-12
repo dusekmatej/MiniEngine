@@ -38,10 +38,25 @@ public class Engine
         _window.Load += OnLoad;
         _window.Update += OnUpdate;
         _window.Render += OnRender;
+        _window.NativeWindow.Closing += OnClosing;
     }
 
     public void Run()
-        => _window.Run();
+    {
+        try
+        {
+            _window.Run();
+        }
+        finally
+        {
+            if (_graphics is not null)
+            {
+                _window.NativeWindow.GLContext?.MakeCurrent();
+                OnClosing();
+            }
+            _window.NativeWindow.Dispose();
+        }
+    }
 
     private void OnLoad()
     {
@@ -51,7 +66,8 @@ public class Engine
         var context = new GraphicsContext(
             name => glContext.GetProcAddress(name),
             _window.NativeWindow.Size.X,
-            _window.NativeWindow.Size.Y
+            _window.NativeWindow.Size.Y,
+            () => glContext.IsCurrent
         );
 
         _graphics = _graphicsFactory.Create(context);
@@ -108,6 +124,16 @@ public class Engine
             position,
             mouse.IsButtonPressed(MouseButton.Left)
         );
+    }
+
+    private void OnClosing()
+    {
+        _textureAssets?.Dispose();
+        if (_graphics is IDisposable disposable)
+            disposable.Dispose();
+        _graphics = null;
+        _input?.Dispose();
+        _input = null;
     }
 
 }

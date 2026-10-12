@@ -12,7 +12,7 @@ using Mesh = MiniEngine.OpenGL.Meshes.Mesh;
 
 namespace MiniEngine.OpenGL.Core;
 
-public class Renderer : IGraphicsBackend
+public class Renderer : IGraphicsBackend, IDisposable
 {
 
     #region Shader sources
@@ -85,6 +85,9 @@ public class Renderer : IGraphicsBackend
     #endregion
 
     private readonly GL _gl;
+    private readonly Func<bool> _isContextCurrent;
+    private readonly int _ownerThread = System.Environment.CurrentManagedThreadId;
+    private bool _disposed;
     private readonly int _viewportWidth;
     private readonly int _viewportHeight;
     private Mesh _quad = null!;
@@ -97,17 +100,22 @@ public class Renderer : IGraphicsBackend
     private readonly Dictionary<int, Texture> _textures = new();
     private int _nextTextureHandle = 1;
 
-    public Renderer(GL gl, int viewportWidth, int viewportHeight)
+    public Renderer(GL gl, int viewportWidth, int viewportHeight, Func<bool> isContextCurrent)
     {
+        ArgumentNullException.ThrowIfNull(gl);
+        ArgumentNullException.ThrowIfNull(isContextCurrent);
         _gl = gl;
+        _isContextCurrent = isContextCurrent;
         _viewportWidth = viewportWidth;
         _viewportHeight = viewportHeight;
 
+        EnsureContext();
         CreateResources();
     }
 
     public void BeginFrame()
     {
+        EnsureContext();
         _gl.Viewport(0, 0, (uint)_viewportWidth, (uint)_viewportHeight);
     }
 
@@ -151,13 +159,19 @@ public class Renderer : IGraphicsBackend
 
     public void Clear()
     {
+        EnsureContext();
         _gl.ClearColor(0.1f, 0.1f, 0.15f, 1.0f);
         _gl.Clear((uint)ClearBufferMask.ColorBufferBit);
     }
 
     public BackendTextureHandle CreateTexture(ImageData image)
     {
-        var texture = new Texture(_gl, image);
+        EnsureContext();
+        if (_nextTextureHandle == int.MaxValue)
+        {
+            throw new InvalidOperationException("Backend texture handle capacity exhausted.");
+        }
+        var texture = new Texture(_gl, image, _isContextCurrent);
 
         var handle = new BackendTextureHandle(_nextTextureHandle++);
 
@@ -168,16 +182,22 @@ public class Renderer : IGraphicsBackend
 
     public void DestroyTexture(BackendTextureHandle handle)
     {
+        EnsureContext();
         if (!_textures.Remove(handle.Value, out var texture))
+        {
             throw new InvalidOperationException($"Texture handle {handle.Value} does not exist.");
+        }
 
         texture.Dispose();
     }
 
     public unsafe void DrawTexture(TextureDrawCommand command)
     {
+        EnsureContext();
         if (!_textures.TryGetValue(command.Texture.Value, out var texture))
+        {
             throw new InvalidOperationException($"Texture handle {command.Texture.Value} does not exist.");
+        }
 
         _textureShader.Use();
 
@@ -202,6 +222,7 @@ public class Renderer : IGraphicsBackend
 
     public unsafe void DrawRectangle(RectangleDrawCommand command)
     {
+        EnsureContext();
         _colorShader.Use();
 
         Matrix4x4 model = Matrix4x4.CreateScale(command.Width * command.Scale.X, command.Height * command.Scale.Y, 1f) *
@@ -222,6 +243,7 @@ public class Renderer : IGraphicsBackend
 
     public unsafe void DrawTriangle(TriangleDrawCommand command)
     {
+        EnsureContext();
         float[] vertices =
         {
             0f, 0f,
@@ -260,6 +282,7 @@ public class Renderer : IGraphicsBackend
 
     public void DrawCircle(CircleDrawCommand command)
     {
+        EnsureContext();
         const int segmentCount = 32;
         float[] vertices = new float[(segmentCount + 2) * 2];
 
@@ -299,12 +322,15 @@ public class Renderer : IGraphicsBackend
 
     public void DrawLine(LineDrawCommand command)
     {
+        EnsureContext();
         float deltaX = command.EndX - command.StartX;
         float deltaY = command.EndY - command.StartY;
         float length = MathF.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
         if (length <= 0f)
+        {
             return;
+        }
 
         float[] vertices =
         {
@@ -355,8 +381,11 @@ public class Renderer : IGraphicsBackend
 
     public unsafe void DrawText(TextDrawCommand command)
     {
+        EnsureContext();
         if (!_textures.TryGetValue(command.Texture.Value, out var texture))
+        {
             throw new InvalidOperationException($"Texture handle {command.Texture.Value} does not exist.");
+        }
 
         _textShader.Use();
 
@@ -379,5 +408,46 @@ public class Renderer : IGraphicsBackend
 
     public void EndFrame()
     {
+        EnsureContext();
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        EnsureContext();
+
+        foreach (Texture texture in _textures.Values)
+        {
+            texture.Dispose();
+        }
+
+        _textures.Clear();
+        _gl.DeleteVertexArray(_quad.VertexArray);
+        _gl.DeleteBuffer(_quad._vertexBuffer);
+        _gl.DeleteVertexArray(_shapeVertexArray);
+        _gl.DeleteBuffer(_shapeVertexBuffer);
+        _gl.DeleteProgram(_textureShader.Handle);
+        _gl.DeleteProgram(_colorShader.Handle);
+        _gl.DeleteProgram(_textShader.Handle);
+        _disposed = true;
+        _gl.Dispose();
+    }
+
+    private void EnsureContext()
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (System.Environment.CurrentManagedThreadId != _ownerThread)
+        {
+            throw new InvalidOperationException("Rendering must run on the owning graphics thread.");
+        }
+
+        if (!_isContextCurrent())
+        {
+            throw new InvalidOperationException("Rendering requires a current OpenGL context.");
+        }
     }
 }

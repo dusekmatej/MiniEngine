@@ -38,7 +38,7 @@ public class Game : IGame
 
         Console.WriteLine("Game: Initializing game...");
 
-        _tileTexture = textureAssets.Load("tile_022");
+        _tileTexture = textureAssets.Load("Terrain/Rocks/tile_061");
 
         InitializeFont();
     }

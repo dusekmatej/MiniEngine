@@ -4,12 +4,12 @@ namespace MiniEngine.Game.Environment;
 
 public class MainScene : Scene
 {
-    public MainWorld World;
+    public MainWorld MainWorld;
 
     public MainScene()
     {
-        World = new MainWorld();
-
-        AddWorld(World);
+        MainWorld = new MainWorld();
+    
+        AddWorld(MainWorld);
     }
 }

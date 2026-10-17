@@ -6,9 +6,7 @@ MiniEngine is a C# game engine organized in `MiniEngine.sln`:
 
 - `Engine/`: ECS components, entities, systems, graphics interfaces, and world management.
 - `OpenGL/`: rendering backend, shaders, meshes, and textures.
-- `AssetPipeline/`: image loading; `Database/`: asset access and terrain resources.
 - `Game/`: sample game implementation; `Bootstrap/`: executable entry point.
-- `Game/Assets/`, `Database/Terrain/`, and `AllTextures/`: fonts and image assets.
 - `docs/`: architecture and subsystem documentation; start with `docs/Overview.md`.
 
 Keep reusable engine behavior in `Engine/`, backend implementation in `OpenGL/`, and game-specific behavior in `Game/`.

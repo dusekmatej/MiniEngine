@@ -11,6 +11,7 @@ public class World : IWorld
 
     public World()
     {
+        _entityManager = new EntityManager();
         _componentRegistry = new ComponentStoreRegistry();
         Components = new ComponentManager(_componentRegistry);
     }

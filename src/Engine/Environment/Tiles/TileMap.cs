@@ -1,4 +1,4 @@
-namespace MiniEngine.Graphics;
+namespace MiniEngine.Environment;
 
 public sealed class TileMap
 {

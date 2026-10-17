@@ -6,7 +6,7 @@ public class Chunk
     public int ChunkX { get; }
     public int ChunkY { get; }
 
-    public Tile[,] Tiles { get; } = new Tile[ChunkSize, ChunkSize];
+    public TileId[,] Tiles { get; } = new TileId[ChunkSize, ChunkSize];
 
     public Chunk (int chunkX, int chunkY)
     {

@@ -1,17 +1,14 @@
-using System.Numerics;
-using MiniEngine.Environment;
 using MiniEngine.Graphics.Presets;
 using MiniEngine.Graphics.Fonts;
 using MiniEngine.Graphics;
 using MiniEngine.Core;
 using MiniEngine.Game.Rendering;
-using MiniEngine.Entities;
+using MiniEngine.Game.Environment;
 
 namespace MiniEngine.Game;
 
 public class Game : IGame
 {
-    private const int GridSize = 9;
     private Graphics2D? _drawing;
     private FontManager? _fontManager;
     private FontAssetHandle? _debugFont;
@@ -20,12 +17,11 @@ public class Game : IGame
     private TextureAssets? _textureAssets;
 
     private IsometricPreset _preset = IsometricPreset.Default;
-    private TileMap _map = new TileMap(GridSize, GridSize);
+
+    private readonly MainScene _mainScene = new();
 
     public Game()
-    {
-        _preset = IsometricPreset.Default;
-    }
+        => _preset = IsometricPreset.Default;
 
     public void Initialize(
         Graphics2D graphics,
@@ -38,8 +34,8 @@ public class Game : IGame
 
         Console.WriteLine("Game: Initializing game...");
 
-        _tileTexture = textureAssets.Load("tile_022");
-
+        _tileTexture = textureAssets.Load("Terrain/Grass/tile_040");
+        
         InitializeFont();
     }
 
@@ -49,6 +45,8 @@ public class Game : IGame
 
     public void Render()
     {
+        var world = _mainScene.MainWorld;
+
         if (_drawing is null || _debugFont is null)
             throw new Exception("Game: Drawing or debug font is not initialized.");
 
@@ -57,9 +55,9 @@ public class Game : IGame
         DrawPlatformDto _drawPlatformDto = new DrawPlatformDto(
             _drawing,
             _tileTexture,
-            GridSize,
+            MainWorld.GridSize,
             _preset,
-            _map
+            world.Map
         );
 
         Drawing.DrawPlatform(_drawPlatformDto);

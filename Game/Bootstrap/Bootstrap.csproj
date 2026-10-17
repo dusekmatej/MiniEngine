@@ -11,7 +11,7 @@
       <ProjectReference Include="..\..\src\Engine\Engine.csproj" />
       <ProjectReference Include="..\Game.csproj" />
       <ProjectReference Include="..\..\src\OpenGL\OpenGL.csproj" />
-      <ProjectReference Include="..\..\src\Database\Database.csproj" />
+      <ProjectReference Include="..\..\src\AssetPipeline\AssetPipeline.csproj" />
     </ItemGroup>
 
     <ItemGroup>

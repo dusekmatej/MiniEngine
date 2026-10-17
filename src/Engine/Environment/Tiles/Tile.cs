@@ -1,6 +1,6 @@
 namespace MiniEngine.Environment;
 
-public class Tile
+public struct Tile
 {
     public TileId DefinitionId { get; set; }
     public byte Variation { get; set; }

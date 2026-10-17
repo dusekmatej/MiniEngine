@@ -1,5 +1,6 @@
 using MiniEngine.Graphics;
 using MiniEngine.Graphics.Presets;
+using MiniEngine.Environment;
 
 
 namespace MiniEngine.Game.Rendering;

@@ -1,6 +1,4 @@
-﻿using MiniEngine;
-using MiniEngine.Database;
-using MiniEngine.Database.Import;
+﻿using MiniEngine.AssetPipeline;
 using MiniEngine.OpenGL.Core;
 using System.Reflection;
 
@@ -11,7 +9,7 @@ public class Program
     public static void Main(string[] args)
     {
         Game.Game game = new Game.Game();
-        CreateEngine(game);
+        BuildEngine(game).Run();
     }
 
     private static void DisplayVersion()
@@ -24,17 +22,14 @@ public class Program
         Console.WriteLine("----------------------------------------------");
     }
 
-    private static void CreateEngine(Game.Game game)
-    {
-        DisplayVersion();
-
-        TerrainImport.PopulateDatabase();
-
+    private static Engine BuildEngine(Game.Game _g)
+    {     
+        var assetRoot = Path.Combine(AppContext.BaseDirectory, "Assets");
+        var assetSource = new FileAssetSource(assetRoot);
+        
         var graphicsFactory = new BackendFactory();
-        var assetSource = new DatabaseAssetSource();
-        Engine engine = new Engine(game, graphicsFactory, assetSource);
-
-        engine.Run();
+        
+        return new Engine(_g, graphicsFactory, assetSource);
     }
 }
 

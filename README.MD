@@ -155,7 +155,7 @@ Hi! I'm **Matej Dusek** a.k.a. matesoidicek, a student building MiniEngine in my
 
 I started the project because I enjoy understanding how systems work underneath the abstractions we normally use when making games.
 
-A big part of the fun for me is designing things like engine architecture, ECS systems, asset management, databases, procedural systems and the connections between all of them.
+A big part of the fun for me is designing things like engine architecture, ECS systems, asset management, procedural systems and the connections between all of them.
 
 MiniEngine is both a project I genuinely want to use for games and a way for me to learn more about **game development, game engines, graphics and software architecture**.
 

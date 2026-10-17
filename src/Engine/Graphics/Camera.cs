@@ -11,17 +11,16 @@ public class Camera
     public float Zoom
     {
         get => _zoom;
-        set
-        {
-            if (value <= 0)
-                throw new ArgumentOutOfRangeException(nameof(value), "Zoom must be greater than zero.");
-
-            _zoom = value;
-        }
+        set => _zoom = Math.Clamp(value, 0.1f, 5f);
     }
 
     public Camera(Vector3 position)
     {
         Position = position;
+    }
+
+    public Vector2 WorldToScreen(Vector2 position)
+    {
+        return (position - new Vector2(Position.X, Position.Y)) * Zoom;
     }
 }

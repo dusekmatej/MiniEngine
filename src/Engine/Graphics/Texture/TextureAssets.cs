@@ -43,6 +43,23 @@ public class TextureAssets
         return Load(name, _assetSource.LoadImage(name));
     }
 
+    public IReadOnlyDictionary<string, TextureAssetHandle> Import(string path)
+    {
+        if (_assetSource is null)
+            throw new InvalidOperationException("No asset source was provided.");
+
+        IReadOnlyList<string> imageNames = _assetSource.GetImageNames(path);
+        var importedTextures = new Dictionary<string, TextureAssetHandle>();
+
+        foreach (string imageName in imageNames)
+        {
+            TextureAssetHandle handle = Load(imageName);
+            importedTextures.Add(imageName, handle);
+        }
+
+        return importedTextures;
+    }
+
     public TextureAssetHandle Load(string name, ImageData imageData)
     {
         if (_textureByName.TryGetValue(name, out int existingIndex))

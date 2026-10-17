@@ -7,12 +7,25 @@ public class MainWorld : World
     public const int GridSize = 9;
     public TileMap Map { get; } = new(GridSize, GridSize);
 
-    private TileDefinitionRegistry _tdm = new();
+    public TileDefinitionRegistry TileDefinitions = new();
+
+    public Chunk Chunk { get; private set;}
 
     public MainWorld()
     {
-        var grass = _tdm.Register(new TileDefinition("Grass", "Terrain/Grass/tile_040"));
-        var water = _tdm.Register(new TileDefinition("Water", "Terrain/Water/tile_109"));
-
+        TestWorld();
     }   
+
+    public void TestWorld()
+    {
+        TileDefinitions.Register(new TileDefinition("Grass", "Terrain/Grass/tile_040"));
+        TileDefinitions.Register(new TileDefinition("Water", "Terrain/Water/tile_109"));
+
+        var generator = new TerrainGenerator(12345, TileDefinitions);
+        generator.Add("Water", 0, 45);
+        generator.Add("Grass", 45, 100);
+
+        Chunk = new Chunk(0, 0);
+        generator.Generate(Chunk);
+    }
 }

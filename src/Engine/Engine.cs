@@ -60,7 +60,7 @@ public class Engine
         _fontManager = new FontManager();
         _drawing = new Graphics2D(_graphics, _textureAssets, _fontManager);
 
-        _game.Initialize(_drawing, _textureAssets, _fontManager);
+        _game.Initialize(_drawing, _textureAssets, _fontManager, _input);
     }
 
     private void OnUpdate(double deltaTime)

@@ -1,12 +1,69 @@
 using System.Numerics;
 using MiniEngine.Graphics;
 using MiniEngine.Graphics.Fonts;
+using MiniEngine.Environment;
+using MiniEngine.Graphics.Presets;
 
 namespace MiniEngine.Game.Rendering;
 
 public static class Drawing
 {
     private static bool _demoButtonWasPressed;
+
+
+
+    public static void DrawChunk(
+        Graphics2D graphics,
+        TextureAssets textures,
+        Chunk chunk,
+        TileDefinitionRegistry definitions,
+        IsometricPreset preset,
+        Camera camera)
+    {
+        for (int depth = 0; depth < Chunk.ChunkSize * 2 - 1; depth++)
+        {
+            int minX = Math.Max(0, depth - Chunk.ChunkSize + 1);
+            int maxX = Math.Min(Chunk.ChunkSize - 1, depth);
+
+            for (int x = minX; x <= maxX; x++)
+            {
+                int y = depth - x;
+
+                TileId tileId = chunk.Tiles[x, y];
+
+                if (!tileId.IsValid)
+                    continue;
+
+                TileDefinition definition = definitions.Get(tileId);
+                TextureAssetHandle texture = textures.Load(definition.Texture);
+
+                int worldX = chunk.ChunkX * Chunk.ChunkSize + x;
+                int worldY = chunk.ChunkY * Chunk.ChunkSize + y;
+
+                float projectedX =
+                    (worldX - worldY) * preset.FootprintWidth / 2f;
+
+                float projectedY =
+                    -(worldX + worldY) * preset.FootprintHeight / 2f;
+
+                Vector2 screenPosition = camera.WorldToScreen(
+                    new Vector2(projectedX, projectedY)
+                );
+
+                graphics.DrawSprite(
+                    texture,
+                    screenPosition.X,
+                    screenPosition.Y,
+                    preset.SpriteWidth * camera.Zoom,
+                    preset.SpriteHeight * camera.Zoom,
+                    EngineColor.White
+                );
+            }
+        }
+    }
+
+
+
 
     public static void DrawPlatform(DrawPlatformDto x)
     {

@@ -9,15 +9,10 @@ public static class ImageLoader
     {
         using var stream = File.OpenRead(path);
 
-        ImageResult image =
-            ImageResult.FromStream(
-                stream,
-                ColorComponents.RedGreenBlueAlpha);
+        ImageResult image = ImageResult
+            .FromStream(stream, ColorComponents.RedGreenBlueAlpha);
 
 
-        return new ImageData(
-            image.Width,
-            image.Height,
-            image.Data);
+        return new ImageData(image.Width, image.Height, image.Data);
     }
 }

@@ -50,8 +50,8 @@ public class Engine
 
         var context = new GraphicsContext(
             name => glContext.GetProcAddress(name),
-            _window.NativeWindow.Size.X,
-            _window.NativeWindow.Size.Y
+            _window.NativeWindow.FramebufferSize.X,
+            _window.NativeWindow.FramebufferSize.Y
         );
 
         _graphics = _graphicsFactory.Create(context);
@@ -60,7 +60,16 @@ public class Engine
         _fontManager = new FontManager();
         _drawing = new Graphics2D(_graphics, _textureAssets, _fontManager);
 
+        _window.NativeWindow.FramebufferResize += size => ResizeGraphics(size.X, size.Y);
+        ResizeGraphics(context.Width, context.Height);
+
         _game.Initialize(_drawing, _textureAssets, _fontManager, _input);
+    }
+
+    private void ResizeGraphics(int width, int height)
+    {
+        _graphics?.Resize(width, height);
+        _drawing?.SetViewportSize(width, height);
     }
 
     private void OnUpdate(double deltaTime)
@@ -98,6 +107,9 @@ public class Engine
         var mouse = _input.Mice[0];
         float width = _window.NativeWindow.Size.X;
         float height = _window.NativeWindow.Size.Y;
+
+        if (width <= 0 || height <= 0)
+            return;
 
         var position = new Vector2(
             mouse.Position.X / width * 2f - 1f,

@@ -4,6 +4,7 @@ namespace MiniEngine.Graphics;
 
 public interface IGraphicsBackend
 {
+    void Resize(int width, int height);
     void BeginFrame();
     void Clear();
     void EndFrame();

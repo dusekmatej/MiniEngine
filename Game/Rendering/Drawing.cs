@@ -12,6 +12,55 @@ public static class Drawing
 
 
 
+    public static int DrawWorld(
+        Graphics2D graphics,
+        TextureAssets textures,
+        MiniEngine.Game.Environment.MainWorld world,
+        IsometricPreset preset,
+        Camera camera)
+    {
+        int drawnTiles = 0;
+        float width = preset.SpriteWidth * camera.Zoom / graphics.AspectRatio;
+        float height = preset.SpriteHeight * camera.Zoom;
+
+        // One global painter order avoids seams where neighboring chunks overlap.
+        int minimumDepth = world.MinimumTileX + world.MinimumTileY;
+        int maximumDepth = world.MaximumTileX + world.MaximumTileY;
+        for (int depth = minimumDepth; depth <= maximumDepth; depth++)
+        {
+            int minimumX = Math.Max(world.MinimumTileX, depth - world.MaximumTileY);
+            int maximumX = Math.Min(world.MaximumTileX, depth - world.MinimumTileY);
+            for (int x = minimumX; x <= maximumX; x++)
+            {
+                int y = depth - x;
+                Vector2 position = camera.WorldToScreen(new Vector2(
+                    (x - y) * preset.FootprintWidth / 2f,
+                    -(x + y) * preset.FootprintHeight / 2f));
+                position.X /= graphics.AspectRatio;
+
+                if (position.X > 1f || position.X + width < -1f ||
+                    position.Y > 1f || position.Y + height < -1f)
+                {
+                    continue;
+                }
+                if (!world.TryGetTile(x, y, out TileId ground, out TileId decoration))
+                {
+                    continue;
+                }
+
+                TextureAssetHandle texture = textures.Load(world.TileDefinitions.Get(ground).Texture);
+                graphics.DrawSprite(texture, position.X, position.Y, width, height, EngineColor.White);
+                if (decoration.IsValid)
+                {
+                    TextureAssetHandle overlay = textures.Load(world.TileDefinitions.Get(decoration).Texture);
+                    graphics.DrawSprite(overlay, position.X, position.Y, width, height, EngineColor.White);
+                }
+                drawnTiles++;
+            }
+        }
+        return drawnTiles;
+    }
+
     public static void DrawChunk(
         Graphics2D graphics,
         TextureAssets textures,

@@ -20,7 +20,8 @@ public class Window
         windowOptions.Size = new Vector2D<int>(800, 600);
         windowOptions.Title = "Engine";
 
-        windowOptions.VSync = false;
+        windowOptions.WindowBorder = WindowBorder.Resizable;
+        windowOptions.VSync = true;
         windowOptions.FramesPerSecond = 26000;
         
         _window = Silk.NET.Windowing.Window.Create(windowOptions);

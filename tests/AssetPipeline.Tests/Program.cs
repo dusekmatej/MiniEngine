@@ -87,6 +87,8 @@ sealed class RecordingGraphicsBackend : IGraphicsBackend
         return default;
     }
 
+    public void Resize(int width, int height) { }
+
     public void BeginFrame() { }
     public void Clear() { }
     public void EndFrame() { }

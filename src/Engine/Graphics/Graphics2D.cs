@@ -10,6 +10,16 @@ public sealed class Graphics2D
     private readonly TextRenderer _textRenderer;
     private readonly List<QueuedCommand> _commands = new();
 
+    public int ViewportWidth { get; private set; } = 800;
+    public int ViewportHeight { get; private set; } = 600;
+    public float AspectRatio => (float)ViewportWidth / ViewportHeight;
+
+    public void SetViewportSize(int width, int height)
+    {
+        ViewportWidth = Math.Max(1, width);
+        ViewportHeight = Math.Max(1, height);
+    }
+
     public Vector2 MousePosition { get; private set; }
     public bool IsLeftMouseButtonPressed { get; private set; }
 

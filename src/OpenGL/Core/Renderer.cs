@@ -85,8 +85,8 @@ public class Renderer : IGraphicsBackend
     #endregion
 
     private readonly GL _gl;
-    private readonly int _viewportWidth;
-    private readonly int _viewportHeight;
+    private int _viewportWidth;
+    private int _viewportHeight;
     private Mesh _quad = null!;
     private uint _shapeVertexArray;
     private uint _shapeVertexBuffer;
@@ -104,6 +104,12 @@ public class Renderer : IGraphicsBackend
         _viewportHeight = viewportHeight;
 
         CreateResources();
+    }
+
+    public void Resize(int width, int height)
+    {
+        _viewportWidth = Math.Max(1, width);
+        _viewportHeight = Math.Max(1, height);
     }
 
     public void BeginFrame()

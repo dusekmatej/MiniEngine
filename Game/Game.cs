@@ -14,7 +14,7 @@ public class Game : IGame
     private Graphics2D? _drawing;
     private FontAssetHandle _debugFont;
     private TextureAssets? _textureAssets;
-    private readonly IsometricPreset _preset = IsometricPreset.Default;
+    private readonly IsometricPreset _preset = IsometricPreset.Blocks;
     private readonly MainScene _mainScene = new();
     private readonly Camera _camera = new(new Vector3(0f, -1.125f, 0f));
     private IKeyboard? _keyboard;

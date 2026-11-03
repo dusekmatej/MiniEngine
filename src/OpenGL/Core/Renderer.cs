@@ -25,6 +25,8 @@ public class Renderer : IGraphicsBackend
     out vec2 TexCoord;
 
     uniform mat4 uModel;
+    uniform bool uUseTextureTransform;
+    uniform mat4 uTextureTransform;
 
     void main()
     {
@@ -33,6 +35,10 @@ public class Renderer : IGraphicsBackend
             vec4(aPosition,0,1);
 
         TexCoord = aTexCoord;
+        if (uUseTextureTransform)
+        {
+            TexCoord = (uTextureTransform * vec4(aTexCoord, 0, 1)).xy;
+        }
     }
     ";
     private const string TextureFragmentShaderSource = @"
@@ -187,14 +193,22 @@ public class Renderer : IGraphicsBackend
 
         _textureShader.Use();
 
-        Matrix4x4 model =
+        Matrix4x4 model = command.Transform ?? (
             Matrix4x4.CreateScale(command.Width * command.Scale.X, command.Height * command.Scale.Y, 1f) *
             Matrix4x4.CreateRotationZ(command.Rotation) *
-            Matrix4x4.CreateTranslation(command.X, command.Y, 0f);
+            Matrix4x4.CreateTranslation(command.X, command.Y, 0f));
 
         int modelLoc = _textureShader.GetUniformLocation("uModel");
 
         _gl.UniformMatrix4(modelLoc, 1, false, (float*)&model);
+
+        int useTextureTransform = _textureShader.GetUniformLocation("uUseTextureTransform");
+        _gl.Uniform1(useTextureTransform, command.TextureTransform.HasValue ? 1 : 0);
+        if (command.TextureTransform is Matrix4x4 textureTransform)
+        {
+            int textureTransformLocation = _textureShader.GetUniformLocation("uTextureTransform");
+            _gl.UniformMatrix4(textureTransformLocation, 1, false, (float*)&textureTransform);
+        }
 
         texture.Bind();
 

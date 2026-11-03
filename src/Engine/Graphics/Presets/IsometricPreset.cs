@@ -8,6 +8,14 @@ public readonly record struct IsometricPreset(
     float ElevationStep
 )
 {
+    public static IsometricPreset Blocks { get; } = new(
+        SpriteWidth: 0.30f,
+        SpriteHeight: 0.30f,
+        FootprintWidth: 0.30f,
+        FootprintHeight: 0.15f,
+        ElevationStep: 0.15f
+    );
+
     public static IsometricPreset Default { get; } = new(
         SpriteWidth: 0.30f,
         SpriteHeight: 0.30f,

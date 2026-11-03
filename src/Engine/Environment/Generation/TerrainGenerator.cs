@@ -43,13 +43,18 @@ public class TerrainGenerator
                 var worldX = chunk.ChunkX * Chunk.ChunkSize + x;
                 var worldY = chunk.ChunkY * Chunk.ChunkSize + y;
 
-                float noiseValue = _perlin.SampleOctaves(worldX * 0.05f, worldY * 0.05f, 4, 0.5f, 2f) * 100f;
+                float noiseValue = SampleNoise(worldX, worldY);
 
                 var newTile = SelectTile(noiseValue);
 
                 chunk.Tiles[x, y] = newTile;
             }
         }
+    }
+
+    public float SampleNoise(int worldX, int worldY)
+    {
+        return _perlin.SampleOctaves(worldX * 0.05f, worldY * 0.05f, 4, 0.5f, 2f) * 100f;
     }
 
     public void GenerateWorld()

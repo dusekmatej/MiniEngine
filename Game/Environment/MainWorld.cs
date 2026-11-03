@@ -29,7 +29,8 @@ public class MainWorld : World
         float padding = preset.SpriteHeight + 0.5f;
         float left = camera.Position.X - (aspectRatio + padding) / camera.Zoom;
         float right = camera.Position.X + (aspectRatio + padding) / camera.Zoom;
-        float bottom = camera.Position.Y - (1f + padding) / camera.Zoom;
+        float maximumRise = TerrainGeneration.MaximumHeight * preset.ElevationStep;
+        float bottom = camera.Position.Y - (1f + padding) / camera.Zoom - maximumRise;
         float top = camera.Position.Y + (1f + padding) / camera.Zoom;
 
         // Inverse of the isometric footprint projection, including negative coordinates.
@@ -67,7 +68,7 @@ public class MainWorld : World
         }
     }
 
-    public bool TryGetTile(int x, int y, out TileId ground)
+    public bool TryGetTile(int x, int y, out TileId ground, out int height)
     {
         int chunkX = (int)MathF.Floor((float)x / Chunk.ChunkSize);
         int chunkY = (int)MathF.Floor((float)y / Chunk.ChunkSize);
@@ -76,11 +77,24 @@ public class MainWorld : World
             int localX = x - chunkX * Chunk.ChunkSize;
             int localY = y - chunkY * Chunk.ChunkSize;
             ground = chunk.Tiles[localX, localY];
+            height = chunk.Heights[localX, localY];
             return true;
         }
 
         ground = TileId.Invalid;
+        height = 0;
         return false;
+    }
+
+    public int GetHeight(int x, int y)
+    {
+        if (TryGetTile(x, y, out _, out int height))
+        {
+            return height;
+        }
+
+        // Sampling an unloaded neighbor avoids artificial cliffs along chunk boundaries.
+        return _terrain.GetHeight(x, y);
     }
 
     private static bool IntersectsView(int chunkX, int chunkY, IsometricPreset preset,

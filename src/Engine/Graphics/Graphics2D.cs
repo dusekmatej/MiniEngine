@@ -181,6 +181,36 @@ public sealed class Graphics2D
         );
     }
 
+    public void DrawTexturedQuad(
+        TextureAssetHandle texture,
+        Vector2 origin,
+        Vector2 horizontal,
+        Vector2 vertical,
+        Vector2 textureOrigin,
+        Vector2 textureHorizontal,
+        Vector2 textureVertical,
+        EngineColor tint)
+    {
+        BackendTextureHandle backendTexture = _textureAssets.GetBackendHandle(texture);
+        var command = new TextureDrawCommand(backendTexture, 0f, 0f, 1f, 1f, Tint: tint)
+        {
+            Transform = CreateQuadTransform(origin, horizontal, vertical),
+            // Sprite UVs start at the top left, while quad positions start at the bottom left.
+            TextureTransform = CreateQuadTransform(
+                textureOrigin + textureVertical, textureHorizontal, -textureVertical)
+        };
+        QueueTexture(command);
+    }
+
+    private static Matrix4x4 CreateQuadTransform(Vector2 origin, Vector2 horizontal, Vector2 vertical)
+    {
+        return new Matrix4x4(
+            horizontal.X, horizontal.Y, 0f, 0f,
+            vertical.X, vertical.Y, 0f, 0f,
+            0f, 0f, 1f, 0f,
+            origin.X, origin.Y, 0f, 1f);
+    }
+
     public void DrawSprite(
         TextureAssetHandle texture,
         float x,

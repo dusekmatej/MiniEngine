@@ -15,12 +15,8 @@ public class Camera
     }
 
     public Camera(Vector3 position)
-    {
-        Position = position;
-    }
+        => Position = position;
 
     public Vector2 WorldToScreen(Vector2 position)
-    {
-        return (position - new Vector2(Position.X, Position.Y)) * Zoom;
-    }
+        =>(position - new Vector2(Position.X, Position.Y)) * Zoom;
 }

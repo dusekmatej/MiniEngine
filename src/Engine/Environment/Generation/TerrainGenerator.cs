@@ -4,7 +4,6 @@ public class TerrainGenerator
 {
     private readonly Perlin _perlin;
     private readonly TileDefinitionRegistry _definitions;
-
     private readonly List<TerrainRule> _rules = new();
 
     public TerrainGenerator(int seed, TileDefinitionRegistry definitions)
@@ -24,10 +23,8 @@ public class TerrainGenerator
             throw new ArgumentException($"TerrainGenerator: Invalid tile name! {tile}, or not registered!");
 
         foreach (TerrainRule rule in _rules)
-        {
             if (min < rule.Max && max > rule.Min)
                 throw new ArgumentException($"TerrainGenerator: Overlapping min/max values! Min: {min}, Max: {max}");
-        }
 
         _rules.Add(new TerrainRule(tileId, min, max));
     }
@@ -55,13 +52,16 @@ public class TerrainGenerator
         }
     }
 
+    public void GenerateWorld()
+    {
+        
+    }
+
     private TileId SelectTile(float value)
     {
         foreach (TerrainRule rule in _rules)
-        {
             if (value >= rule.Min && (value < rule.Max || rule.Max == 100))
                 return rule.Tile;
-        }
 
         return TileId.Invalid;
     }

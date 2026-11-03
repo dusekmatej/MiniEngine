@@ -43,18 +43,13 @@ public static class Drawing
                 {
                     continue;
                 }
-                if (!world.TryGetTile(x, y, out TileId ground, out TileId decoration))
+                if (!world.TryGetTile(x, y, out TileId ground))
                 {
                     continue;
                 }
 
                 TextureAssetHandle texture = textures.Load(world.TileDefinitions.Get(ground).Texture);
                 graphics.DrawSprite(texture, position.X, position.Y, width, height, EngineColor.White);
-                if (decoration.IsValid)
-                {
-                    TextureAssetHandle overlay = textures.Load(world.TileDefinitions.Get(decoration).Texture);
-                    graphics.DrawSprite(overlay, position.X, position.Y, width, height, EngineColor.White);
-                }
                 drawnTiles++;
             }
         }

@@ -20,19 +20,16 @@ public class Game : IGame
     private IKeyboard? _keyboard;
     private const float CameraSpeed = 2f;
 
-    public void Initialize(Graphics2D graphics, TextureAssets textureAssets,
-        FontManager fontManager, IInputContext input)
+    public void Initialize(Graphics2D graphics, TextureAssets textureAssets, FontManager fontManager, IInputContext input)
     {
         _textureAssets = textureAssets;
         _drawing = graphics;
+        
         if (input.Keyboards.Count > 0)
-        {
             _keyboard = input.Keyboards[0];
-        }
+            
         if (input.Mice.Count > 0)
-        {
             input.Mice[0].Scroll += OnMouseScroll;
-        }
 
         string fontPath = Path.Combine(AppContext.BaseDirectory, "Assets", "Fonts", "JetBrainsMono-Bold.ttf");
         _debugFont = fontManager.AddFont("debug", fontPath);
@@ -40,16 +37,12 @@ public class Game : IGame
     }
 
     private void OnMouseScroll(IMouse mouse, ScrollWheel scroll)
-    {
-        _camera.Zoom = Math.Clamp(_camera.Zoom * MathF.Pow(1.1f, scroll.Y), 0.25f, 4f);
-    }
+        => _camera.Zoom = Math.Clamp(_camera.Zoom * MathF.Pow(1.1f, scroll.Y), 0.25f, 4f);
 
     public void Update(float deltaTime)
     {
         if (_keyboard is null)
-        {
             return;
-        }
 
         Vector3 movement = Vector3.Zero;
         if (_keyboard.IsKeyPressed(Key.W) || _keyboard.IsKeyPressed(Key.Up))
@@ -78,9 +71,7 @@ public class Game : IGame
     public void Render()
     {
         if (_drawing is null || _textureAssets is null)
-        {
             throw new InvalidOperationException("Game: Graphics have not been initialized.");
-        }
 
         MainWorld world = _mainScene.MainWorld;
         world.UpdateVisibleChunks(_camera, _preset, _drawing.AspectRatio);
@@ -95,9 +86,7 @@ public class Game : IGame
     private void DrawHud(string text, float y)
     {
         if (_drawing is null || text.Length == 0)
-        {
             return;
-        }
 
         // JetBrains Mono advances by 0.6 em. Fit each line even in a tall window.
         const float characterAdvance = 0.6f;

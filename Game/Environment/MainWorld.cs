@@ -11,7 +11,7 @@ public class MainWorld : World
     public TileMap Map { get; } = new(GridSize, GridSize);
 
     private readonly TerrainGeneration _terrain = new();
-    private readonly Dictionary<(int X, int Y), TerrainChunk> _chunks = new();
+    private readonly Dictionary<(int X, int Y), Chunk> _chunks = new();
     private readonly List<(int X, int Y)> _unloaded = new();
 
     public TileDefinitionRegistry TileDefinitions => _terrain.Definitions;
@@ -45,12 +45,9 @@ public class MainWorld : World
 
         _unloaded.Clear();
         foreach (var entry in _chunks)
-        {
             if (!IntersectsView(entry.Key.X, entry.Key.Y, preset, left, right, bottom, top))
-            {
                 _unloaded.Add(entry.Key);
-            }
-        }
+
         foreach (var coordinate in _unloaded)
         {
             _chunks.Remove(coordinate);
@@ -70,21 +67,19 @@ public class MainWorld : World
         }
     }
 
-    public bool TryGetTile(int x, int y, out TileId ground, out TileId decoration)
+    public bool TryGetTile(int x, int y, out TileId ground)
     {
         int chunkX = (int)MathF.Floor((float)x / Chunk.ChunkSize);
         int chunkY = (int)MathF.Floor((float)y / Chunk.ChunkSize);
-        if (_chunks.TryGetValue((chunkX, chunkY), out TerrainChunk? chunk))
+        if (_chunks.TryGetValue((chunkX, chunkY), out Chunk? chunk))
         {
             int localX = x - chunkX * Chunk.ChunkSize;
             int localY = y - chunkY * Chunk.ChunkSize;
-            ground = chunk.Ground.Tiles[localX, localY];
-            decoration = chunk.Decorations[localX, localY];
+            ground = chunk.Tiles[localX, localY];
             return true;
         }
 
         ground = TileId.Invalid;
-        decoration = TileId.Invalid;
         return false;
     }
 

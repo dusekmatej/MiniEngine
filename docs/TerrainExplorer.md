@@ -7,7 +7,7 @@ Run `make run`. The window starts at 800×600 and supports resizing, maximizing 
 - The mouse wheel zooms between 0.25× and 4×. Movement speed follows zoom.
 - Home returns to the starting camera position and zoom.
 
-`Game/Environment/TerrainGeneration.cs` configures the sample terrain using the engine's seeded Perlin generator. The bands concentrate near the middle of the noise distribution: deep water below 39, shallow water at 39–44, dirt shores at 44–47, grass at 47–59, earth at 59–63 and stone above 63. Texture variants and sparse flower/rock overlays use stable world-coordinate hashes. Flower patches also use a separate vegetation noise field. Assets come from `Game/Assets/Terrain` and decorations are drawn over complete ground tiles.
+`Game/Environment/TerrainGeneration.cs` configures the sample terrain using the engine's seeded Perlin generator. The bands concentrate near the middle of the noise distribution: deep water below 39, shallow water at 39–44, dirt shores at 44–47, grass at 47–59, earth at 59–63 and stone above 63. Grass uses the darker, textured tiles 028, 027 and 035, arranged in coherent patches by a separate noise field. Water uses a plain deep tile (092) and a calm shallow tile (104), and earth uses the muted dirt tile 003. Other ground texture variants use stable world-coordinate hashes. Terrain renders only ground tiles from `Game/Assets/Terrain`.
 
 `MainWorld` generates 16×16 chunks around the view, including negative coordinates. It removes distant chunks and regenerates them deterministically on return. A small margin outside the screen reduces churn. This sample does not persist edits to unloaded chunks. The HUD shows resident, generated and unloaded chunk counts.
 

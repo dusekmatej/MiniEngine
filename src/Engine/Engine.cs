@@ -4,6 +4,7 @@ using MiniEngine.Graphics.Fonts;
 using MiniEngine.Systems.Core;
 using Silk.NET.Input;
 using System.Numerics;
+using MiniEngine.Input;
 
 namespace MiniEngine;
 
@@ -14,6 +15,8 @@ public class Engine
     private readonly IGraphicsBackendFactory _graphicsFactory;
     private readonly IAssetSource? _assetSource;
     private readonly List<SystemInfo> _systems;
+    
+    private KeyboardInput? _keyboardInput;
 
 
     private IGraphicsBackend? _graphics;
@@ -60,7 +63,8 @@ public class Engine
         _fontManager = new FontManager();
         _drawing = new Graphics2D(_graphics, _textureAssets, _fontManager);
 
-        _game.Initialize(_drawing, _textureAssets, _fontManager, _input);
+        _keyboardInput = new KeyboardInput();
+        _game.Initialize(_drawing, _textureAssets, _fontManager,_keyboardInput, _input);
     }
 
     private void OnUpdate(double deltaTime)
@@ -72,7 +76,10 @@ public class Engine
             if (systemInfo.System is IUpdateSystem system)
                 system.Update(x);
         }
-
+        if (_input?.Keyboards.FirstOrDefault() is IKeyboard keyboard)
+        {
+            _keyboardInput?.UpdateState(keyboard);
+        }
         _game.Update((float)deltaTime);
     }
 

@@ -6,6 +6,8 @@ using MiniEngine.Game.Rendering;
 using MiniEngine.Game.Environment;
 using System.Numerics;
 using Silk.NET.Input;
+using MiniEngine.Input;
+using EngineKey = MiniEngine.Input.Key;
 
 namespace MiniEngine.Game;
 
@@ -22,7 +24,7 @@ public class Game : IGame
 
     private readonly MainScene _mainScene = new();
     private readonly Camera _camera = new(new Vector3(0f, -1.125f, 0f));
-    private IKeyboard? _keyboard;
+    private KeyboardInput? _keyboard;
     private const float CameraSpeed = 2f;
 
     public Game()
@@ -32,15 +34,15 @@ public class Game : IGame
         Graphics2D graphics,
         TextureAssets textureAssets,
         FontManager fontManager,
+        KeyboardInput keyboard,
         IInputContext input)
     {
         _textureAssets = textureAssets;
         _drawing = graphics;
         _fontManager = fontManager;
+        _keyboard = keyboard;
 
-        if (input.Keyboards.Count > 0)
-            _keyboard = input.Keyboards[0];
-
+        
         if (input.Mice.Count > 0)
             input.Mice[0].Scroll += OnMouseScroll;
 
@@ -64,16 +66,16 @@ public class Game : IGame
 
         Vector3 movement = Vector3.Zero;
 
-        if (_keyboard.IsKeyPressed(Key.W))
+        if (_keyboard.IsKeyDown(EngineKey.W))
             movement.Y += 1f;
 
-        if (_keyboard.IsKeyPressed(Key.S))
+        if (_keyboard.IsKeyDown(EngineKey.S))
             movement.Y -= 1f;
 
-        if (_keyboard.IsKeyPressed(Key.A))
+        if (_keyboard.IsKeyDown(EngineKey.A))
             movement.X -= 1f;
 
-        if (_keyboard.IsKeyPressed(Key.D))
+        if (_keyboard.IsKeyDown(EngineKey.D))
             movement.X += 1f;
 
         if (movement != Vector3.Zero)

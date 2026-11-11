@@ -1,6 +1,7 @@
 using MiniEngine.Core;
 using MiniEngine.Graphics;
 using MiniEngine.Graphics.Fonts;
+using MiniEngine.Logging;
 using MiniEngine.Systems.Core;
 using Silk.NET.Input;
 using System.Numerics;
@@ -9,6 +10,8 @@ namespace MiniEngine;
 
 public class Engine
 {
+    public static Logger Log { get; } = CreateLog();
+
     private readonly Window _window; // Don't mistake the IWindow with Window class
     private readonly IGame _game;
     private readonly IGraphicsBackendFactory _graphicsFactory;
@@ -42,6 +45,14 @@ public class Engine
 
     public void Run()
         => _window.Run();
+
+    private static Logger CreateLog()
+    {
+        var log = new Logger("Engine");
+        log.AddSink(new ConsoleLogSink());
+
+        return log;
+    }
 
     private void OnLoad()
     {

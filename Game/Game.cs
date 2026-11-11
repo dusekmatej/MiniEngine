@@ -5,7 +5,6 @@ using MiniEngine.Core;
 using MiniEngine.Game.Rendering;
 using MiniEngine.Game.Environment;
 using System.Numerics;
-using Silk.NET.Input;
 using MiniEngine.Input;
 using EngineKey = MiniEngine.Input.Key;
 
@@ -25,6 +24,7 @@ public class Game : IGame
     private readonly MainScene _mainScene = new();
     private readonly Camera _camera = new(new Vector3(0f, -1.125f, 0f));
     private KeyboardInput? _keyboard;
+    private MouseInput? _mouse;
     private const float CameraSpeed = 2f;
 
     public Game()
@@ -35,18 +35,15 @@ public class Game : IGame
         TextureAssets textureAssets,
         FontManager fontManager,
         KeyboardInput keyboard,
-        IInputContext input)
+        MouseInput mouse)
     {
         _textureAssets = textureAssets;
         _drawing = graphics;
         _fontManager = fontManager;
         _keyboard = keyboard;
+        _mouse = mouse;
 
         
-        if (input.Mice.Count > 0)
-            input.Mice[0].Scroll += OnMouseScroll;
-
-
         Console.WriteLine("Game: Initializing game...");
 
         _tileTexture = textureAssets.Load("Terrain/Grass/tile_040");
@@ -54,17 +51,22 @@ public class Game : IGame
         InitializeFont();
     }
 
-    private void OnMouseScroll(IMouse mouse, ScrollWheel scroll)
-    {
-        _camera.Zoom *= MathF.Pow(1.1f, scroll.Y);
-    }
-
     public void Update(float deltaTime)
     {
         if (_keyboard is null)
-            return;
+        return;
 
-        Vector3 movement = Vector3.Zero;
+        if (_mouse is not null)
+        {
+            Vector2 scroll = _mouse.ConsumeScroll();
+
+         if (scroll.Y != 0)
+         {
+             _camera.Zoom *= MathF.Pow(1.1f, scroll.Y);
+         }
+        }
+
+    Vector3 movement = Vector3.Zero;
 
         if (_keyboard.IsKeyDown(EngineKey.W))
             movement.Y += 1f;
@@ -81,9 +83,18 @@ public class Game : IGame
         if (movement != Vector3.Zero)
         {
             movement = Vector3.Normalize(movement);
-
+            
             _camera.Position += movement * CameraSpeed * deltaTime;
         }
+        if (_mouse is not null)
+{
+        Vector2 scroll = _mouse.ConsumeScroll();
+
+            if (scroll.Y != 0)
+            {
+                _camera.Zoom *= MathF.Pow(1.1f, scroll.Y);
+            }
+}
     }
 
     public void Render()

@@ -6,6 +6,7 @@ using Silk.NET.Input;
 using System.Numerics;
 using MiniEngine.Input;
 
+
 namespace MiniEngine;
 
 public class Engine
@@ -23,6 +24,7 @@ public class Engine
     private TextureAssets? _textureAssets;
     private FontManager? _fontManager;
     private Graphics2D? _drawing;
+    private MouseInput? _mouseInput;
     private IInputContext? _input;
 
     // TESTING FIELD FOR SYSTEMS
@@ -59,12 +61,18 @@ public class Engine
 
         _graphics = _graphicsFactory.Create(context);
         _input = _window.NativeWindow.CreateInput();
+        _mouseInput = new MouseInput();
+        if (_input.Mice.FirstOrDefault() is IMouse mouse)
+        {
+             _mouseInput.Connect(mouse);
+        }
         _textureAssets = new TextureAssets(_graphics, _assetSource);
         _fontManager = new FontManager();
         _drawing = new Graphics2D(_graphics, _textureAssets, _fontManager);
+        
 
         _keyboardInput = new KeyboardInput();
-        _game.Initialize(_drawing, _textureAssets, _fontManager,_keyboardInput, _input);
+        _game.Initialize(_drawing, _textureAssets, _fontManager,_keyboardInput, _mouseInput);
     }
 
     private void OnUpdate(double deltaTime)
@@ -79,6 +87,10 @@ public class Engine
         if (_input?.Keyboards.FirstOrDefault() is IKeyboard keyboard)
         {
             _keyboardInput?.UpdateState(keyboard);
+        }
+        if (_input?.Mice.FirstOrDefault() is IMouse mouse)
+        {
+        _mouseInput?.UpdateState(mouse);
         }
         _game.Update((float)deltaTime);
     }
@@ -99,22 +111,22 @@ public class Engine
 
     private void UpdateMouseState()
     {
-        if (_drawing is null || _input is null || _input.Mice.Count == 0)
+        if (_drawing is null || _mouseInput is null)
             return;
 
-        var mouse = _input.Mice[0];
         float width = _window.NativeWindow.Size.X;
-        float height = _window.NativeWindow.Size.Y;
-
+        float height = _window.NativeWindow.Size.Y; 
+        
         var position = new Vector2(
-            mouse.Position.X / width * 2f - 1f,
-            1f - mouse.Position.Y / height * 2f
+            _mouseInput.Position.X / width * 2f - 1f,
+            1f - _mouseInput.Position.Y / height * 2f
         );
 
         _drawing.SetMouseState(
             position,
-            mouse.IsButtonPressed(MouseButton.Left)
+            _mouseInput.IsButtonDown(MiniEngine.Input.MouseButton.Left)
         );
     }
+    
 
 }

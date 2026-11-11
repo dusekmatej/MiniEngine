@@ -1,6 +1,5 @@
 using MiniEngine.Graphics;
 using MiniEngine.Graphics.Fonts;
-using Silk.NET.Input;
 using MiniEngine.Input;
 
 namespace MiniEngine.Core;
@@ -12,7 +11,7 @@ public interface IGame
         TextureAssets textureAssets,
         FontManager fontManager,
         KeyboardInput keyboard,
-        IInputContext inputContext);
+        MouseInput mouse);
     public void Update(float deltaTime);
     public void Render();
 }
